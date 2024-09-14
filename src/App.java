@@ -1,0 +1,29 @@
+
+public class App {
+    public static void main(String[] args) throws Exception {
+        // Login instance = new Login();
+        // Register regInstance = new Register();
+
+        // ApplianceList al = new ApplianceList(new User("techie410",
+        // User.PERMISSION_CLIENT));
+
+        // ApplianceListIndividualButton alib = new ApplianceListIndividualButton(
+        // new User("techie410", User.PERMISSION_CLIENT));
+
+        ApplianceListWithUserInputInfo alib = new ApplianceListWithUserInputInfo(
+                new User("techie410", User.PERMISSION_CLIENT));
+
+        // testImage hairdryer = new testImage();
+
+        // Appliance hairdryerapp = new Appliance(1);
+
+        // System.out.println(hairdryerapp.checkApplianceIDExists()); // checking if it
+        // exists
+
+        // System.out.println(hairdryerapp.checkApplianceIDExists());
+        // ApplianceInfo hairdryerInfo = new ApplianceInfo(hairdryerapp);
+
+        // new newAppliance(hairdryerapp);
+
+    }
+}
