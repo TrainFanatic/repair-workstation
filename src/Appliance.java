@@ -41,7 +41,7 @@ public class Appliance {
         this.owner = owner;
 
         // SQL
-        request.SQLUpdate("UPDATE username SET location = \"" + location + "\" WHERE appliance_id = "
+        request.SQLUpdate("UPDATE appliances SET username = \"" + owner + "\" WHERE appliance_id = "
                 + String.valueOf(getApplianceID()));
     }
 

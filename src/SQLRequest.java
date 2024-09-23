@@ -7,13 +7,14 @@ import java.io.ByteArrayOutputStream;
 
 public class SQLRequest {
     String key;
+    String driver = "com.mysql.cj.jdbc.Driver";
 
     public ResultSet SQLQuery(String SQL) {
         Statement sqlst;
         ResultSet result = null;
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(driver);
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost: 3306/repair_workshop", "root",
                     this.key);
             sqlst = con.createStatement();
@@ -22,11 +23,12 @@ public class SQLRequest {
             // con.close(); // this causes ResultSet to be closed!!!!!
 
         } catch (ClassNotFoundException ex) {
-            System.out.println("Class not found, (JAR file)");
+            System.out.println("Class not found: " + driver);
         }
 
         catch (SQLException ex) {
             System.out.println("SQL BROKEN " + ex.getMessage());
+            System.out.println("For Query: " + SQL);
         }
         return result;
     }
@@ -35,7 +37,7 @@ public class SQLRequest {
         Statement sqlst;
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(driver);
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost: 3306/repair_workshop", "root",
                     this.key);
             sqlst = con.createStatement();
@@ -43,11 +45,13 @@ public class SQLRequest {
             con.close();
 
         } catch (ClassNotFoundException ex) {
-            System.out.println("Class not found, (JAR file)");
+            System.out.println("Class not found: " + driver);
         }
 
         catch (SQLException ex) {
             System.out.println("SQL BROKEN " + ex.getMessage());
+            System.out.println("For Query: " + SQL);
+            ex.printStackTrace();
         }
     }
 
@@ -57,7 +61,7 @@ public class SQLRequest {
         byte[] blobbytes = null;
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName(driver);
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost: 3306/repair_workshop", "root",
                     this.key);
             sqlst = con.createStatement();
@@ -75,11 +79,12 @@ public class SQLRequest {
             return blobbytes;
 
         } catch (ClassNotFoundException ex) {
-            System.out.println("Class not found, (JAR file)");
+            System.out.println("Class not found: " + driver);
         }
 
         catch (SQLException ex) {
             System.out.println("SQL BROKEN " + ex.getMessage());
+            System.out.println("For Query: " + SQL);
         }
 
         return blobbytes;
@@ -94,7 +99,7 @@ public class SQLRequest {
         Statement sqlst;
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(driver);
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost: 3306/repair_workshop", "root",
                     this.key);
 
@@ -115,11 +120,12 @@ public class SQLRequest {
             pstmt.close();
 
         } catch (ClassNotFoundException ex) {
-            System.out.println("Class not found, (JAR file)");
+            System.out.println("Class not found: " + driver);
         }
 
         catch (SQLException ex) {
             System.out.println("SQL BROKEN " + ex.getMessage());
+            System.out.println("For Image BLOB query");
         }
     }
 

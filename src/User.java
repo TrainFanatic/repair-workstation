@@ -50,6 +50,7 @@ public class User {
 
     public Queue getAllAppliances() throws FileNotFoundException, SQLException {
         SQLRequest sqlr = new SQLRequest();
+        System.out.println("test");
         ResultSet rs = sqlr.SQLQuery("SELECT * FROM appliances");
 
         Queue<Appliance> q = new LinkedList<>();
