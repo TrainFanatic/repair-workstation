@@ -8,6 +8,9 @@ import java.io.ByteArrayOutputStream;
 public class SQLRequest {
     String key;
     String driver = "com.mysql.cj.jdbc.Driver";
+    String url = "jdbc:mysql://192.168.1.93: 3306/repair_workshop";
+    // String user = "root"; // macos (localhost)
+    String user = "techie410"; // windows
 
     public ResultSet SQLQuery(String SQL) {
         Statement sqlst;
@@ -15,8 +18,7 @@ public class SQLRequest {
 
         try {
             Class.forName(driver);
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost: 3306/repair_workshop", "root",
-                    this.key);
+            Connection con = DriverManager.getConnection(url, user, this.key);
             sqlst = con.createStatement();
             result = sqlst.executeQuery(SQL);
 
@@ -38,8 +40,7 @@ public class SQLRequest {
 
         try {
             Class.forName(driver);
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost: 3306/repair_workshop", "root",
-                    this.key);
+            Connection con = DriverManager.getConnection(url, user, this.key);
             sqlst = con.createStatement();
             sqlst.executeUpdate(SQL);
             con.close();
@@ -62,8 +63,7 @@ public class SQLRequest {
 
         try {
             Class.forName(driver);
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost: 3306/repair_workshop", "root",
-                    this.key);
+            Connection con = DriverManager.getConnection(url, user, this.key);
             sqlst = con.createStatement();
 
             ResultSet query = sqlst.executeQuery(SQL);
@@ -100,8 +100,7 @@ public class SQLRequest {
 
         try {
             Class.forName(driver);
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost: 3306/repair_workshop", "root",
-                    this.key);
+            Connection con = DriverManager.getConnection(url, user, this.key);
 
             PreparedStatement pstmt = con
                     .prepareStatement("update appliances_photos set image_object = ? where appliance_id = ?");
@@ -130,9 +129,9 @@ public class SQLRequest {
     }
 
     public SQLRequest() throws FileNotFoundException {
-        File keyfile = new File(
-                "/Users/christopherginting/Desktop/School lmfao/IB/Compsci/IA/cs_ia/src/mysql_server_key"); // read pwd
-                                                                                                            // from file
+        // File keyfile = new File("/Users/christopherginting/Desktop/School lmfao/IB/Compsci/IA/cs_ia/src/mysql_server_key"); // macOS build
+        
+        File keyfile = new File("C:\\Users\\Christopher Ginting\\Documents\\GitHub\\repair-workstation\\src\\mysql_server_key"); // windows build
         Scanner sc = new Scanner(keyfile);
 
         this.key = sc.nextLine();
