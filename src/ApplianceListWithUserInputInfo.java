@@ -83,13 +83,13 @@ public class ApplianceListWithUserInputInfo implements ActionListener {
         // setup table
         // need to iterate thru all
 
-        Queue allAppliances = user.getAllAppliances();
+        Queue allAppliances = user.getAllAppliances(); // loads all appliances in database into the Queue
 
         Appliance curApp;
 
         while (!allAppliances.isEmpty()) { // DONE added list all functionaliy. does this work?
-            curApp = (Appliance) allAppliances.remove();
-            addTableRow(curApp);
+            curApp = (Appliance) allAppliances.remove(); // retrieves and removes tail of queue
+            addTableRow(curApp); // pre-defined method that adds to the table one by one
         }
 
         // addTableRow(new Appliance(1)); // todo need to add functionality to list all
