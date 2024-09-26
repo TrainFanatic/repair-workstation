@@ -54,11 +54,13 @@ public class saltAndHash {
         PBEKeySpec spec = new PBEKeySpec(password, Base64.getDecoder().decode(salt), ITERATIONS, KEY_LENGTH);
         Arrays.fill(password, Character.MIN_VALUE);
         try {
-            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-            // return skf.generateSecret(spec).getEncoded();
-            return Base64.getEncoder().encodeToString(skf.generateSecret(spec).getEncoded());
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1"); // select key derivation function
+            // return skf.generateSecret(spec).getEncoded(); // wrong data type... must
+            // return String
+            return Base64.getEncoder().encodeToString(skf.generateSecret(spec).getEncoded()); // encoder --> String
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-            throw new AssertionError("Error while hashing a password: " + e.getMessage(), e);
+            throw new AssertionError("Error while hashing a password: " + e.getMessage(), e); // error message for
+                                                                                              // debugging
         } finally {
             spec.clearPassword();
         }
@@ -78,11 +80,15 @@ public class saltAndHash {
      *         otherwise
      */
     public static boolean isExpectedPassword(char[] password, String salt, char[] expectedHash) {
-        char[] pwdHash = hash(password, salt).toCharArray();
+        char[] pwdHash = hash(password, salt).toCharArray(); // generate hash locally
         Arrays.fill(password, Character.MIN_VALUE);
-        if (pwdHash.length != expectedHash.length)
+        if (pwdHash.length != expectedHash.length) { // this is very bad. only happens when hashing alg is wrong or
+                                                     // database is tampered
+            System.err.println("Something is very wrong: The retrieved hash from SQL is the wrong length");
             return false;
-        for (int i = 0; i < pwdHash.length; i++) {
+        }
+
+        for (int i = 0; i < pwdHash.length; i++) { // iterate to compare hash char by char
             if (pwdHash[i] != expectedHash[i])
                 return false;
         }

@@ -21,7 +21,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.nio.file.Files;
 
-public class newAppliance implements ActionListener {
+public class ApplianceEditor implements ActionListener {
 
     static final String EMPTY_FILEPATH = "this is an EMPTY filepath";
     JLabel newApplianceText = new JLabel("<HTML><H1><U>New Appliance</U></H1></HTML");
@@ -42,7 +42,7 @@ public class newAppliance implements ActionListener {
 
     JLabel imageText = new JLabel("Image");
     JButton imageFileChooserButton = new JButton("Select file");
-    String selectedPath = newAppliance.EMPTY_FILEPATH;
+    String selectedPath = ApplianceEditor.EMPTY_FILEPATH;
 
     JButton submitButton = new JButton("Submit");
     JButton backButton = new JButton("Back");
@@ -51,7 +51,8 @@ public class newAppliance implements ActionListener {
 
     Appliance toBeEditedAppliance;
 
-    public newAppliance(Appliance toBeEditedAppliance) throws FileNotFoundException, SQLException {
+    public ApplianceEditor(Appliance toBeEditedAppliance, boolean isNewAppliance)
+            throws FileNotFoundException, SQLException {
         this.toBeEditedAppliance = toBeEditedAppliance;
 
         frame.setSize(300, 200);
@@ -220,14 +221,14 @@ public class newAppliance implements ActionListener {
         }
         // if the user cancelled the operation
         else {
-            selectedPath = newAppliance.EMPTY_FILEPATH;
+            selectedPath = ApplianceEditor.EMPTY_FILEPATH;
         }
     }
 
     public void submitAppliancePhoto() {
         // update image
         System.out.println(selectedPath);
-        if (selectedPath == newAppliance.EMPTY_FILEPATH) {
+        if (selectedPath == ApplianceEditor.EMPTY_FILEPATH) {
             // reject
             // System.out.println("rejected filepath!");
             submitButton.setText("Select valid JPEG file!");

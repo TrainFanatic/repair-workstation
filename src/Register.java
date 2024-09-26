@@ -177,8 +177,7 @@ public class Register implements ActionListener {
                 try {
                     successful = registerDatabaseEntry();
                 } catch (FileNotFoundException | SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                    e.printStackTrace(); // handle exception
                 }
             } else {
                 warningText.setText("Passwords do not match. Try again.");

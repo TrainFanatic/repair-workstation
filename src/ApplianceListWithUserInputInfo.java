@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Point;
 import java.io.FileNotFoundException;
 
 public class ApplianceListWithUserInputInfo implements ActionListener {
@@ -75,8 +76,9 @@ public class ApplianceListWithUserInputInfo implements ActionListener {
 
         // setup frame
 
-        frame.setSize(400, 400); // todo calibrate
+        frame.setSize(600, 600); // todo calibrate
         frame.setLayout(new GridBagLayout());
+        frame.setLocationRelativeTo(null);
 
         GridBagConstraints constraints = new GridBagConstraints();
 
@@ -91,6 +93,26 @@ public class ApplianceListWithUserInputInfo implements ActionListener {
             curApp = (Appliance) allAppliances.remove(); // retrieves and removes tail of queue
             addTableRow(curApp); // pre-defined method that adds to the table one by one
         }
+        applianceTable.setDefaultEditor(Object.class, null);
+
+        applianceTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent doubleClick) {
+                Point point = doubleClick.getPoint();
+                int row = applianceTable.rowAtPoint(point);
+                if (doubleClick.getClickCount() == 2 && applianceTable.getSelectedRow() != -1) {
+                    // code here
+                    try {
+                        new ApplianceInfo(
+                                new Appliance((int) applianceTable.getValueAt(row, 0)),
+                                currentUser);
+                    } catch (NumberFormatException | FileNotFoundException | SQLException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
 
         // addTableRow(new Appliance(1)); // todo need to add functionality to list all
         // appliances of user
