@@ -21,7 +21,7 @@ import java.awt.event.*;
 import java.io.File;
 import java.nio.file.Files;
 
-public class ApplianceEditor implements ActionListener {
+public class newAppliance implements ActionListener {
 
     static final String EMPTY_FILEPATH = "this is an EMPTY filepath";
     JLabel newApplianceText = new JLabel("<HTML><H1><U>New Appliance</U></H1></HTML");
@@ -51,11 +51,15 @@ public class ApplianceEditor implements ActionListener {
 
     Appliance toBeEditedAppliance;
     boolean isNewAppliance = false;
+    User currentUser;
 
-    public ApplianceEditor(Appliance toBeEditedAppliance)
+    public newAppliance(User currentUser) // new Appliance
             throws FileNotFoundException, SQLException {
-        this.toBeEditedAppliance = toBeEditedAppliance;
+        this.currentUser = currentUser;
+        SQLRequest sqlr = new SQLRequest();
+        this.toBeEditedAppliance = new Appliance(sqlr.nextID(), currentUser.getUsername(), "", "", 0, "", false);
 
+        isNewAppliance = true;
         setUpFrame();
 
     }
@@ -85,7 +89,7 @@ public class ApplianceEditor implements ActionListener {
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
 
-        ownerField.setText(toBeEditedAppliance.getOwner());
+        ownerField.setText(currentUser.getUsername());
 
         ownerField.setEditable(false);
         // constraints.weightx = 1;
@@ -126,7 +130,6 @@ public class ApplianceEditor implements ActionListener {
         // constraints.weightx = 1;
         // constraints.weighty = 1;
         constraints.ipady = 0;
-        applianceTypeField.setText(toBeEditedAppliance.getType());
 
         frame.add(applianceTypeField, constraints);
 
@@ -150,7 +153,6 @@ public class ApplianceEditor implements ActionListener {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
-        notesArea.setText(toBeEditedAppliance.getNote());
 
         frame.add(notesArea, constraints);
 
@@ -258,10 +260,14 @@ public class ApplianceEditor implements ActionListener {
     }
 
     public void createNewEntries() {
+        System.out.println("Trying to create new database entries for ID " + toBeEditedAppliance.getApplianceID());
         try {
             SQLRequest sqlr = new SQLRequest();
-            sqlr.SQLUpdate("INSERT " + toBeEditedAppliance.getApplianceID()
-                    + ", \'placeholder_username\', \'\', NULL, 0, \'note\' INTO appliances");
+            sqlr.SQLUpdate("INSERT INTO appliances VALUES(" + toBeEditedAppliance.getApplianceID()
+                    + ", \'" + currentUser.getUsername() + "\', \'\', NULL, 0, \'note\');"); // appliances table
+
+            sqlr.SQLUpdate("INSERT INTO appliances_photos VALUES(" + toBeEditedAppliance.getApplianceID()
+                    + ", NULL);"); // appliances_photos table
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

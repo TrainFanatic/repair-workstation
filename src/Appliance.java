@@ -10,15 +10,17 @@ import javax.sql.rowset.serial.SerialBlob;
 import com.mysql.cj.jdbc.exceptions.SQLError;
 
 public class Appliance {
-    public final int STATUS_UNINITIALISED = -1;
-    public final int STATUS_UNDELIVERED = 0;
-    public final int STATUS_UNTOUCHED = 1;
-    public final int STATUS_DIAGNOSED = 2;
-    public final int STATUS_UNDER_REPAIR = 3;
-    public final int STATUS_REPAIRED = 4;
-    public final int STATUS_IRREPARABLE = 5;
+    public static final int STATUS_UNINITIALISED = -1;
+    public static final int STATUS_UNDELIVERED = 0;
+    public static final int STATUS_UNTOUCHED = 1;
+    public static final int STATUS_DIAGNOSED = 2;
+    public static final int STATUS_UNDER_REPAIR = 3;
+    public static final int STATUS_REPAIRED = 4;
+    public static final int STATUS_IRREPARABLE = 5;
 
     int ApplianceID;
+    public static final int ID_NOT_SET = -1;
+
     int status = STATUS_UNINITIALISED;
     boolean retrievedStatusFromSQL = false;
 
@@ -225,6 +227,13 @@ public class Appliance {
 
         // System.out.println("set appliance ID to " + ID);
         this.ApplianceID = ID;
+    }
+
+    public Appliance() throws FileNotFoundException { // for new appliances
+        request = new SQLRequest();
+
+        // System.out.println("set appliance ID to " + ID);
+        this.ApplianceID = ID_NOT_SET;
     }
 
     public Appliance(int ID, String username, String note, String location, int status, String type, boolean inDatabase)

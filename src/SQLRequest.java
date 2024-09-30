@@ -92,6 +92,40 @@ public class SQLRequest {
 
     }
 
+    public int nextID() {
+        Statement sqlst;
+
+        int highestID = 0;
+
+        String SQL = "SELECT appliance_id FROM appliances ORDER BY appliance_id DESC;";
+
+        try {
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(url, user, this.key);
+            sqlst = con.createStatement();
+
+            ResultSet query = sqlst.executeQuery(SQL);
+
+            query.next();
+
+            highestID = query.getInt(1);
+
+            query.close();
+            con.close();
+
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class not found: " + driver);
+        }
+
+        catch (SQLException ex) {
+            System.out.println("SQL BROKEN " + ex.getMessage());
+            System.out.println("For Query: " + SQL);
+        }
+
+        return highestID + 1;
+
+    }
+
     public void UpdateAppliancesImageObject(byte[] imageBlob, int appliance_id) { // there needs to be an extra method
                                                                                   // because trying to create a single
                                                                                   // query as a string and then passing
@@ -102,8 +136,10 @@ public class SQLRequest {
         try {
             Class.forName(driver);
             Connection con = DriverManager.getConnection(url, user, this.key);
-            // Connection con = DriverManager.getConnection("jdbc:mysql://localhost: 3306/repair_workshop", "root",
-            //         this.key); // open a connection to the repair workshop database
+            // Connection con = DriverManager.getConnection("jdbc:mysql://localhost:
+            // 3306/repair_workshop", "root",
+            // this.key); // open a connection to the repair workshop databa
+            // e
 
             PreparedStatement pstmt = con
                     .prepareStatement("update appliances_photos set image_object = ? where appliance_id = ?");
