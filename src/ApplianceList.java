@@ -156,7 +156,7 @@ public class ApplianceList implements ActionListener {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
-
+        backButton.addActionListener(this);
         frame.add(backButton, constraints);
 
         // newApplianceButton
@@ -187,11 +187,15 @@ public class ApplianceList implements ActionListener {
 
             try {
                 newAppliance na = new newAppliance(currentUser);
-                
+
             } catch (FileNotFoundException | SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            frame.setVisible(false);
+            frame.dispose();
+        } else if (actionCommand.equals("Back")) {
+            Landing l = new Landing(this.currentUser);
             frame.setVisible(false);
             frame.dispose();
         }

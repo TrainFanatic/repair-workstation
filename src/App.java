@@ -1,7 +1,7 @@
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // Login instance = new Login();
+        Login instance = new Login();
         // Register regInstance = new Register();
 
         // ApplianceList al = new ApplianceList(new User("techie410",
@@ -33,7 +33,7 @@ public class App {
         // User me = new User("techie410", User.PERMISSION_CLIENT);
         // AppointmentList apl = new AppointmentList(me);
 
-        new AppointmentBooking();
+        // new AppointmentBooking();
 
     }
 }

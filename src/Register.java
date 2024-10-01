@@ -33,6 +33,7 @@ public class Register implements ActionListener {
 
         frame.setSize(300, 200);
         frame.setLayout(new GridBagLayout());
+        frame.setLocationRelativeTo(null);
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.PAGE_START;

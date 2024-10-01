@@ -43,6 +43,7 @@ public class ApplianceInfo implements ActionListener {
 
         frame.setSize(800, 400);
         frame.setLayout(new GridBagLayout());
+        frame.setLocationRelativeTo(null);
 
         // make all text comps non editable
         repairerValue.setEditable(false);

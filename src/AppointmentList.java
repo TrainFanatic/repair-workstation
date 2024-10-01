@@ -128,7 +128,7 @@ public class AppointmentList implements ActionListener {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
-
+        backButton.addActionListener(this);
         frame.add(backButton, constraints);
 
         // newAppointmentButton
@@ -157,7 +157,11 @@ public class AppointmentList implements ActionListener {
 
         if (actionCommand.equals("New Appointment")) {
 
-            // TODO: to write
+            new AppointmentBooking(this.currentUser);
+        } else if (actionCommand.equals("Back")) {
+            new Landing(this.currentUser);
+            frame.setVisible(false);
+            frame.dispose();
         }
     }
 

@@ -14,12 +14,15 @@ public class Landing implements ActionListener {
 
     JButton logoutButton = new JButton("Log out");
 
+    JButton appointmentsButton = new JButton("Check your appointments");
+
     JButton checkAppliancesButton = new JButton("Check your appliances");
 
     public void screensetup() {
 
         frame.setSize(300, 200);
         frame.setLayout(new GridBagLayout());
+        frame.setLocationRelativeTo(null);
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.PAGE_START;
@@ -36,7 +39,7 @@ public class Landing implements ActionListener {
         frame.add(msgLanding, constraints);
 
         // logoutButton
-        constraints.gridx = 0;
+        constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.gridwidth = 1; // no longer full width component
         constraints.fill = GridBagConstraints.NONE;
@@ -46,8 +49,8 @@ public class Landing implements ActionListener {
         frame.add(logoutButton, constraints);
 
         // loginButton
-        constraints.gridx = 1;
-        constraints.gridy = 4;
+        constraints.gridx = 0;
+        constraints.gridy = 2;
         constraints.gridwidth = 1; // no longer full width component
         constraints.fill = GridBagConstraints.NONE;
         constraints.weightx = 0.1;
@@ -55,6 +58,18 @@ public class Landing implements ActionListener {
 
         checkAppliancesButton.addActionListener(this);
         frame.add(checkAppliancesButton, constraints);
+
+        // appointmentsButton
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1; // no longer full width component
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.weightx = 0.1;
+        // constraints.weighty = 1;
+
+        appointmentsButton.addActionListener(this);
+        frame.add(appointmentsButton, constraints);
+
         frame.setVisible(true);
 
     }
@@ -91,6 +106,13 @@ public class Landing implements ActionListener {
 
         } else if (actionCommand.equals("Log out")) {
             Login login = new Login();
+        } else if (actionCommand.equals("Check your appointments")) {
+            try {
+                new AppointmentList(user);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         frame.setVisible(false);
         frame.dispose();

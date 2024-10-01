@@ -28,6 +28,8 @@ import java.time.ZoneId;
 import java.util.Date;
 
 public class AppointmentBooking implements ActionListener {
+    User currentUser;
+
     int appointmentID;
 
     JLabel makeAppointmentsText = new JLabel("<HTML><b><u>Make an appointment</u></b></HTML>");
@@ -44,7 +46,12 @@ public class AppointmentBooking implements ActionListener {
 
     JFrame frame = new JFrame();
 
-    public AppointmentBooking() {
+    public AppointmentBooking(User user) {
+        this.currentUser = user;
+        frame.setSize(600, 600); // TODO: calibrate
+        frame.setLayout(new GridBagLayout());
+        frame.setLocationRelativeTo(null);
+
         frame.add(dateChooser);
 
         frame.setVisible(true);

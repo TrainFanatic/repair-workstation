@@ -67,6 +67,7 @@ public class newAppliance implements ActionListener {
     public void setUpFrame() throws SQLException {
         frame.setSize(600, 400);
         frame.setLayout(new GridBagLayout());
+        frame.setLocationRelativeTo(null);
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.PAGE_START;
