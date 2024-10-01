@@ -34,7 +34,7 @@ public class Appliance {
                     "SELECT username FROM appliances WHERE appliance_id = " + String.valueOf(getApplianceID()));
             rs.next();
             owner = rs.getString(1);
-            retrievedLocationFromSQL = true;
+            retrievedOwnerFromSQL = true;
         }
         return owner;
     }

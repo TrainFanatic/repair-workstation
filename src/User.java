@@ -11,6 +11,7 @@ public class User {
     static final int PERMISSION_ADMIN = 2;
 
     String username;
+    static final String PLACEHOLDER_USERNAME = "This is a placeholder username";
 
     public String getUsername() {
         return username;
@@ -48,9 +49,9 @@ public class User {
 
     }
 
-    public Queue getAllAppliances() throws FileNotFoundException, SQLException {
+    public Queue<Appliance> getAllAppliances() throws FileNotFoundException, SQLException {
         SQLRequest sqlr = new SQLRequest();
-        System.out.println("test");
+        // System.out.println("test");
         ResultSet rs = sqlr.SQLQuery("SELECT * FROM appliances");
 
         Queue<Appliance> q = new LinkedList<>();
@@ -59,8 +60,28 @@ public class User {
             if (rs.getString("username").equals(getUsername())) {
 
                 q.add(new Appliance(rs.getInt("appliance_id"), rs.getString("username"), rs.getString("note"),
-                        rs.getString("location"), rs.getInt("repair_status"), rs.getString("type"), true));
+                        rs.getString("location"), rs.getInt("repair_status"), rs.getString("type"), true)); // TODO: no
+                                                                                                            // need to
+                                                                                                            // do this??
             }
+        }
+
+        return q;
+
+    }
+
+    public Queue<Appointment> getAllAppointments() throws FileNotFoundException, SQLException {
+        SQLRequest sqlr = new SQLRequest();
+        System.out.println("test");
+        ResultSet rs = sqlr
+                .SQLQuery("SELECT appointment_id FROM appointments WHERE username = \"" + getUsername() + "\";");
+
+        Queue<Appointment> q = new LinkedList<>();
+
+        while (rs.next()) {
+            q.add(new Appointment(rs.getInt(1)));
+            // System.out.println("Added" + String.valueOf(rs.getInt(1))); //debugging.
+            // functionned ok
         }
 
         return q;
@@ -69,5 +90,10 @@ public class User {
 
     public User(String username, int permission) {
         this.username = username;
+    }
+
+    public User(String username) {
+        this.username = username;
+        this.permission = PERMISSION_UNINITIALISED;
     }
 }
