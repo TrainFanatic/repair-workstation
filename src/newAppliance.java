@@ -72,7 +72,7 @@ public class newAppliance implements ActionListener {
         constraints.anchor = GridBagConstraints.PAGE_START;
         // ownerText
         constraints.gridx = 0;
-        constraints.gridy = 0;
+        constraints.gridy = 1;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -81,9 +81,9 @@ public class newAppliance implements ActionListener {
         // constraints.weighty = 1;
         // applianceTypeText.setVerticalAlignment(SwingConstants.CENTER);
 
-        frame.add(applianceTypeText, constraints);
+        frame.add(ownerText, constraints);
         // ownerField
-        constraints.gridx = 0;
+        constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 2;
         constraints.weightx = 0.0;
@@ -95,7 +95,7 @@ public class newAppliance implements ActionListener {
         // constraints.weightx = 1;
         // constraints.weighty = 1;
 
-        frame.add(newApplianceText, constraints);
+        frame.add(ownerField, constraints);
 
         // newApplianceText
         constraints.gridx = 0;
@@ -110,7 +110,7 @@ public class newAppliance implements ActionListener {
 
         // applianceTypeText
         constraints.gridx = 0;
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -123,7 +123,7 @@ public class newAppliance implements ActionListener {
 
         // applianceTypeField
         constraints.gridx = 1;
-        constraints.gridy = 1;
+        constraints.gridy = 2;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -135,7 +135,7 @@ public class newAppliance implements ActionListener {
 
         // notesText
         constraints.gridx = 0;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -147,7 +147,7 @@ public class newAppliance implements ActionListener {
 
         // notesArea
         constraints.gridx = 1;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -158,7 +158,7 @@ public class newAppliance implements ActionListener {
 
         // imageText
         constraints.gridx = 0;
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -170,7 +170,7 @@ public class newAppliance implements ActionListener {
 
         // imageFileChooserButton
         constraints.gridx = 1;
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -184,7 +184,7 @@ public class newAppliance implements ActionListener {
 
         // backButton
         constraints.gridx = 0;
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -197,7 +197,7 @@ public class newAppliance implements ActionListener {
 
         // submitButton
         constraints.gridx = 1;
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -291,7 +291,16 @@ public class newAppliance implements ActionListener {
                 isNewAppliance = false;
 
             }
+
             updateCredentials();
+            frame.setVisible(false);
+            frame.dispose();
+            try {
+                new ApplianceList(currentUser);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
         }
     }

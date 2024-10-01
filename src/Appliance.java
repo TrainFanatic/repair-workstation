@@ -164,7 +164,7 @@ public class Appliance {
         this.note = note;
 
         // SQL
-        request.SQLUpdate("UPDATE appliances SET type = \"" + note + "\" WHERE appliance_id = "
+        request.SQLUpdate("UPDATE appliances SET note = \"" + note + "\" WHERE appliance_id = "
                 + String.valueOf(getApplianceID()));
     }
 

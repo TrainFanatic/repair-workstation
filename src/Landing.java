@@ -78,7 +78,7 @@ public class Landing implements ActionListener {
             try {
 
                 try {
-                    ApplianceListWithUserInputInfo ALWUI = new ApplianceListWithUserInputInfo(user);
+                    ApplianceList ALWUI = new ApplianceList(user);
                 } catch (SQLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
