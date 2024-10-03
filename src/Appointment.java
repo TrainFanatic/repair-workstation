@@ -14,6 +14,7 @@ public class Appointment {
 
     Repairer repairer;
     boolean retrievedRepairerfromSQL = false;
+    boolean assignedRepairer = false;
 
     User client;
     boolean retrievedClientFromSQL = false;
@@ -100,6 +101,9 @@ public class Appointment {
             ResultSet rs = request.SQLQuery(
                     "SELECT repairer_id FROM appointments WHERE appointment_id = "
                             + String.valueOf(getAppointmentID()));
+            // System.out.println("SELECT repairer_id FROM appointments WHERE appointment_id
+            // = "
+            // + String.valueOf(getAppointmentID()));
             rs.next();
             repairer_id = rs.getInt(1);
             this.repairer = new Repairer(repairer_id);

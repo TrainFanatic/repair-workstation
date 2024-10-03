@@ -76,7 +76,7 @@ public class ApplianceList implements ActionListener {
 
         Appliance curApp;
 
-        while (!allAppliances.isEmpty()) { // DONE added list all functionaliy. does this work?
+        while (!allAppliances.isEmpty()) { // DONE added list all functionality. does this work?
             curApp = (Appliance) allAppliances.remove(); // retrieves and removes tail of queue
             addTableRow(curApp); // pre-defined method that adds to the table one by one
         }

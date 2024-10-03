@@ -92,12 +92,45 @@ public class SQLRequest {
 
     }
 
-    public int nextID() {
+    public int nextApplianceID() {
         Statement sqlst;
 
         int highestID = 0;
 
         String SQL = "SELECT appliance_id FROM appliances ORDER BY appliance_id DESC;";
+
+        try {
+            Class.forName(driver);
+            Connection con = DriverManager.getConnection(url, user, this.key);
+            sqlst = con.createStatement();
+
+            ResultSet query = sqlst.executeQuery(SQL);
+
+            query.next();
+
+            highestID = query.getInt(1);
+
+            query.close();
+            con.close();
+
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Class not found: " + driver);
+        }
+
+        catch (SQLException ex) {
+            System.out.println("SQL BROKEN " + ex.getMessage());
+            System.out.println("For Query: " + SQL);
+        }
+
+        return highestID + 1;
+
+    }
+    public int nextAppointmentID() {
+        Statement sqlst;
+
+        int highestID = 0;
+
+        String SQL = "SELECT appointment_id FROM appointments ORDER BY appointment_id DESC;";
 
         try {
             Class.forName(driver);

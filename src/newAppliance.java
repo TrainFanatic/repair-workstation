@@ -57,7 +57,8 @@ public class newAppliance implements ActionListener {
             throws FileNotFoundException, SQLException {
         this.currentUser = currentUser;
         SQLRequest sqlr = new SQLRequest();
-        this.toBeEditedAppliance = new Appliance(sqlr.nextID(), currentUser.getUsername(), "", "", 0, "", false);
+        this.toBeEditedAppliance = new Appliance(sqlr.nextApplianceID(), currentUser.getUsername(), "", "", 0, "",
+                false);
 
         isNewAppliance = true;
         setUpFrame();

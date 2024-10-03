@@ -157,7 +157,14 @@ public class AppointmentList implements ActionListener {
 
         if (actionCommand.equals("New Appointment")) {
 
-            new AppointmentBooking(this.currentUser);
+            try {
+                new AppointmentBooking(this.currentUser);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            frame.setVisible(false);
+            frame.dispose();
         } else if (actionCommand.equals("Back")) {
             new Landing(this.currentUser);
             frame.setVisible(false);

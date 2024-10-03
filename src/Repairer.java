@@ -3,7 +3,10 @@ import java.sql.*;
 
 public class Repairer extends User {
     int repairer_id;
+    public static int PLACEHOLDER_REPAIRER_ID = -1;
+
     boolean retrievedRepairerIDFromSQL = false;
+    public static String PLACEHOLDER_REPAIRER_USERNAME = "Repairer not assigned";
 
     public Repairer(String username, int repairer_id) {
         super(username, User.PERMISSION_REPAIRER);
@@ -15,10 +18,16 @@ public class Repairer extends User {
                                                                                   // known
         super(User.PLACEHOLDER_USERNAME, User.PERMISSION_REPAIRER);
         SQLRequest request = new SQLRequest();
-        ResultSet rs = request.SQLQuery(
-                "SELECT username FROM login WHERE repairer_id = " + repairer_id + ";");
-        rs.next();
-        this.username = rs.getString(1); // replaces placeholder username with actual username
+
+        if (repairer_id != PLACEHOLDER_REPAIRER_ID) {
+            ResultSet rs = request.SQLQuery(
+                    "SELECT username FROM login WHERE repairer_id = " + repairer_id + ";");
+            rs.next();
+            this.username = rs.getString(1); // replaces placeholder username with actual username
+        } else {
+            this.username = PLACEHOLDER_REPAIRER_USERNAME; // need this special case so that it doesn't try to retrieve
+                                                           // id -1 from SQL.
+        }
     }
 
     public int getRepairerID() throws SQLException, FileNotFoundException {
