@@ -49,7 +49,7 @@ public class ApplianceList implements ActionListener {
     private void addTableRow(Appliance appliance) throws SQLException {
         int ID = appliance.getApplianceID();
         String applianceType = appliance.getType();
-        int status = appliance.getStatus();
+        String status = Appliance.statusToString(appliance.getStatus());
 
         // JButton applianceInfoButton = new JButton("blabalb");
 

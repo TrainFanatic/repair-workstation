@@ -19,9 +19,9 @@ public class ApplianceInfo implements ActionListener {
     User user;
     JLabel infoText = new JLabel("<HTML><H1><B>Info on appliance</B></H1></HTML>", SwingConstants.CENTER);
 
-    JLabel repairerText = new JLabel("<HTML><B>Repairer:</B></HTML>");
+    JLabel ownerText = new JLabel("<HTML><B>Repairer:</B></HTML>");
 
-    JTextField repairerValue = new JTextField("Bob");
+    JTextField ownerValue = new JTextField("Bob");
 
     JLabel statusText = new JLabel("<HTML><B>Status:</B></HTML>");
     JTextField statusValue = new JTextField("Under repair...");
@@ -41,12 +41,17 @@ public class ApplianceInfo implements ActionListener {
     public ApplianceInfo(Appliance appliance, User user) throws SQLException {
         displayedAppliance = appliance;
 
+        // re-set the relevant text fields
+        ownerValue.setText(appliance.getOwnerString());
+        statusValue.setText(Appliance.statusToString(appliance.getStatus()));
+        notesArea.setText(appliance.getNote());
+
         frame.setSize(800, 400);
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
 
         // make all text comps non editable
-        repairerValue.setEditable(false);
+        ownerValue.setEditable(false);
         statusValue.setEditable(false);
         notesArea.setEditable(false);
         // notes must wrap
@@ -84,7 +89,7 @@ public class ApplianceInfo implements ActionListener {
 
         frame.add(picLabel, constraints);
 
-        // repairerText/Value
+        // ownerText/Value
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
@@ -94,9 +99,9 @@ public class ApplianceInfo implements ActionListener {
         // constraints.weightx = 1;
         // constraints.weighty = 1;
 
-        frame.add(repairerText, constraints);
+        frame.add(ownerText, constraints);
         constraints.gridx = 1;
-        frame.add(repairerValue, constraints);
+        frame.add(ownerValue, constraints);
 
         // statusText/Value
         constraints.gridx = 0;
@@ -120,7 +125,7 @@ public class ApplianceInfo implements ActionListener {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
         constraints.weighty = 1;
-        notesArea.setText(appliance.getNote());
+        // notesArea.setText(appliance.getNote());
         frame.add(notesText, constraints);
         constraints.gridx = 1;
         frame.add(notesArea, constraints);

@@ -169,5 +169,15 @@ public class AppointmentBooking implements ActionListener {
             frame.setVisible(false);
             frame.dispose();
         }
+        if (actionString.equals("Back")) {
+            frame.setVisible(false);
+            frame.dispose();
+            try {
+                new AppointmentList(currentUser);
+            } catch (FileNotFoundException | SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+        }
     }
 }

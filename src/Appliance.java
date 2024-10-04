@@ -27,7 +27,7 @@ public class Appliance {
     String owner; // todo: add functionality to retrieve or set owner okok
     boolean retrievedOwnerFromSQL = false;
 
-    public String getOwner() throws SQLException {
+    public String getOwnerString() throws SQLException {
         if (!retrievedOwnerFromSQL) { // if NOT retrieved
             // retrieve
             ResultSet rs = request.SQLQuery(
@@ -37,6 +37,18 @@ public class Appliance {
             retrievedOwnerFromSQL = true;
         }
         return owner;
+    }
+
+    public User getOwnerUser() throws SQLException {
+        if (!retrievedOwnerFromSQL) { // if NOT retrieved
+            // retrieve
+            ResultSet rs = request.SQLQuery(
+                    "SELECT username FROM appliances WHERE appliance_id = " + String.valueOf(getApplianceID()));
+            rs.next();
+            owner = rs.getString(1);
+            retrievedOwnerFromSQL = true;
+        }
+        return new User(owner);
     }
 
     public void setOwner(String owner) { // be VERY CAREFUL with this method
@@ -220,6 +232,28 @@ public class Appliance {
         existsQuery.close();
         return exists;
 
+    }
+
+    public static String statusToString(int status) {
+        if (status == -1) {
+            return "Uninitialised";
+        } else if (status == 0) {
+            return "Undelivered";
+        } else if (status == 1) {
+            return "Untouched";
+        } else if (status == 2) {
+            return "Diagnosed";
+        } else if (status == 3) {
+            return "Under Repair";
+        } else if (status == 4) {
+            return "Repaired";
+        } else if (status == 5) {
+            return "Irreparable";
+        } else {
+            System.err
+                    .println("Unknown status number " + String.valueOf(status) + " has been passed to statusToString");
+            return "App broken. See error logs";
+        }
     }
 
     public Appliance(int ID) throws FileNotFoundException {
