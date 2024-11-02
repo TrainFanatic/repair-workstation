@@ -86,7 +86,7 @@ public class ApplianceEditor implements ActionListener {
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
 
-        ownerField.setText(toBeEditedAppliance.getOwner());
+        ownerField.setText(toBeEditedAppliance.getOwnerString());
 
         ownerField.setEditable(false);
         // constraints.weightx = 1;
