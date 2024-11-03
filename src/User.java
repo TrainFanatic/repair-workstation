@@ -103,6 +103,14 @@ public class User {
 
     }
 
+    public void deleteFromSQL() throws FileNotFoundException {
+        SQLRequest request = new SQLRequest();
+
+        // SQL
+        request.SQLUpdate("DELETE FROM login WHERE username = "
+                + this.username);
+    }
+
     public User(String username, int permission) {
         this.username = username;
     }

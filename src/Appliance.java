@@ -234,6 +234,17 @@ public class Appliance {
 
     }
 
+    public void deleteFromSQL() throws FileNotFoundException {
+        SQLRequest request = new SQLRequest();
+
+        // SQL
+        request.SQLUpdate("DELETE FROM appliances WHERE appliance_id = "
+                + String.valueOf(getApplianceID()));
+
+        request.SQLUpdate("DELETE FROM appliances_photos WHERE appliance_id = "
+                + String.valueOf(getApplianceID()));
+    }
+
     public static String statusToString(int status) {
         if (status == -1) {
             return "Uninitialised";

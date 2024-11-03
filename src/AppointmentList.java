@@ -44,6 +44,7 @@ public class AppointmentList implements ActionListener {
 
     JButton backButton = new JButton("Back");
     JButton newAppointmentButton = new JButton("New Appointment");
+    JButton refreshButton = new JButton("Refresh");
 
     Appointment[] listAppointments;
 
@@ -102,9 +103,7 @@ public class AppointmentList implements ActionListener {
                     // code here
 
                     try {
-                        new AppointmentInfo(new Appointment((int) applianceTable.getValueAt(row, 0))); // TODO:
-                                                                                                       // appointment
-                                                                                                       // info
+                        new AppointmentInfo(new Appointment((int) applianceTable.getValueAt(row, 0)), currentUser);
 
                     } catch (NumberFormatException | FileNotFoundException | SQLException e) {
 
@@ -115,13 +114,12 @@ public class AppointmentList implements ActionListener {
             }
         });
 
-        // addTableRow(new Appliance(1)); // todo need to add functionality to list all
-        // appliances of user
+        updateAppointmentListAccordingToUser(currentUser);
 
         // appointmentsText
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.gridwidth = 2;
+        constraints.gridwidth = 3;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
@@ -132,7 +130,7 @@ public class AppointmentList implements ActionListener {
         // scrollPane
         constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.gridwidth = 2;
+        constraints.gridwidth = 3;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
@@ -189,8 +187,21 @@ public class AppointmentList implements ActionListener {
         backButton.addActionListener(this);
         frame.add(backButton, constraints);
 
-        // newAppointmentButton
+        // refreshButton
         constraints.gridx = 1;
+        constraints.gridy = 4;
+        constraints.gridwidth = 1;
+        constraints.weightx = 0.0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        // constraints.weightx = 1;
+        // constraints.weighty = 1;
+
+        refreshButton.addActionListener(this);
+
+        frame.add(refreshButton, constraints);
+
+        // newAppointmentButton
+        constraints.gridx = 2;
         constraints.gridy = 4;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
@@ -249,6 +260,13 @@ public class AppointmentList implements ActionListener {
                 e.printStackTrace();
             }
 
+        } else if (actionCommand.equals("Refresh")) {
+            try {
+                updateAppointmentListAccordingToUser(currentUser);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 

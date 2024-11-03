@@ -49,6 +49,7 @@ public class ApplianceInfo implements ActionListener {
     public ApplianceInfo(Appliance appliance, User user, boolean openApplianceInfoUponClosure) throws SQLException {
         displayedAppliance = appliance;
         this.user = user;
+        this.openApplianceInfoUponClosure = openApplianceInfoUponClosure;
 
         // re-set the relevant text fields
         ownerValue.setText(appliance.getOwnerString());
@@ -175,8 +176,6 @@ public class ApplianceInfo implements ActionListener {
         // if the user presses the save button show the save dialog
         // System.out.println(evt.getActionCommand());
         if (actionCommand.equals("Back")) {
-            frame.setVisible(false);
-            frame.dispose();
 
             if (openApplianceInfoUponClosure) {
 
@@ -187,6 +186,8 @@ public class ApplianceInfo implements ActionListener {
                     e.printStackTrace();
                 }
             }
+            frame.setVisible(false);
+            frame.dispose();
 
         } else if (actionCommand.equals("Edit this appliance")) {
 

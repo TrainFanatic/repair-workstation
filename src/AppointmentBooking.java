@@ -31,6 +31,7 @@ import java.util.Queue;
 public class AppointmentBooking implements ActionListener {
     User currentUser;
 
+    Appointment toBeModifiedAppointment;
     int appointmentID;
 
     JLabel makeAppointmentsText = new JLabel("<HTML><h1><b><u>Make an appointment</u></b></h1></HTML>");
@@ -50,6 +51,15 @@ public class AppointmentBooking implements ActionListener {
     JFrame frame = new JFrame();
 
     Appointment draftAppointment;
+
+    boolean modifying = false;
+
+    public AppointmentBooking(User user, Appointment appointment) throws FileNotFoundException, SQLException {
+
+        modifying = true;
+        this.toBeModifiedAppointment = appointment;
+        new AppointmentBooking(user);
+    }
 
     public AppointmentBooking(User user) throws FileNotFoundException, SQLException {
         this.currentUser = user;
@@ -147,6 +157,18 @@ public class AppointmentBooking implements ActionListener {
 
     }
 
+    public void modifyEntry(Appointment appointment) throws NumberFormatException, FileNotFoundException, SQLException {
+        SQLRequest sqlr = new SQLRequest();
+
+        System.out.println("Trying to modify database entries for ID " + appointment.getAppointmentID());
+
+        sqlr.SQLUpdate("UPDATE appointments SET appointment_date = DATE \'"
+                + Appointment.dateToString(dateChooser.getDate()) + "\', appliance_id = "
+                + Integer.parseInt((String) applianceSelect.getSelectedItem())
+                + " WHERE appointment_id = " + appointment.getAppointmentID() + ";");
+
+    }
+
     public void actionPerformed(ActionEvent e) {
         String actionString = e.getActionCommand();
 
@@ -161,7 +183,11 @@ public class AppointmentBooking implements ActionListener {
         } else if (actionString.equals("OK")) {
             // submit this as an appointment
             try {
-                createNewEntries();
+                if (modifying) {
+                    modifyEntry(toBeModifiedAppointment);
+                } else {
+                    createNewEntries();
+                }
                 new AppointmentList(currentUser);
             } catch (NumberFormatException | FileNotFoundException | SQLException e1) {
                 // TODO Auto-generated catch block

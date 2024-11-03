@@ -159,6 +159,14 @@ public class Appointment {
                 + String.valueOf(getAppointmentID()));
     }
 
+    public void deleteFromSQL() throws FileNotFoundException {
+        SQLRequest request = new SQLRequest();
+
+        // SQL
+        request.SQLUpdate("DELETE FROM appointments WHERE appointment_id = "
+                + String.valueOf(getAppointmentID()));
+    }
+
     public static String dateToString(Date d) {
         java.util.Date dt = new java.util.Date();
 

@@ -105,7 +105,7 @@ public class ApplianceList implements ActionListener {
 
                         new ApplianceInfo(
                                 new Appliance((int) applianceTable.getValueAt(row, 0)),
-                                currentUser);
+                                currentUser, true);
                         frame.setVisible(false);
                         frame.dispose();
                     } catch (NumberFormatException | FileNotFoundException | SQLException e) {
@@ -230,7 +230,7 @@ public class ApplianceList implements ActionListener {
             frame.dispose();
         } else if (actionCommand.equals("Back")) {
             try {
-                Landing l = new Landing(this.currentUser);
+                new Landing(this.currentUser);
             } catch (FileNotFoundException | SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
