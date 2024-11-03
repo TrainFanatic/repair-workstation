@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 
 public class AppointmentList implements ActionListener {
     User currentUser;
+    User displayedUser;
     JFrame frame = new JFrame();
 
     JLabel appointmentsText = new JLabel("This is the appointments JTextField");
@@ -35,6 +36,11 @@ public class AppointmentList implements ActionListener {
 
     JTable applianceTable = new JTable(appointmentTableModel);
     JScrollPane scrollPane = new JScrollPane(applianceTable);
+
+    JLabel UserInputLabel = new JLabel("User:");
+    JTextField UserInputTextField = new JTextField();
+
+    JButton loadUserButton = new JButton("Load User's Appointments");
 
     JButton backButton = new JButton("Back");
     JButton newAppointmentButton = new JButton("New Appointment");
@@ -57,8 +63,23 @@ public class AppointmentList implements ActionListener {
 
     }
 
+    private void updateAppointmentListAccordingToUser(User u) throws FileNotFoundException, SQLException {
+        appointmentTableModel.setRowCount(0);
+
+        Queue<Appointment> allAppointments = u.getAllAppointments();
+
+        Appointment curApp;
+
+        while (!allAppointments.isEmpty()) { // DONE added list all functionaliy. does this work?
+            curApp = allAppointments.remove(); // retrieves and removes tail of queue
+            addTableRow(curApp); // pre-defined method that adds to the table one by one
+        }
+        appointmentsText.setText("<HTML><H1><B><U>" + u.getUsername() + "\'s appointments</U></B></H1></HTML>");
+    }
+
     public AppointmentList(User user) throws FileNotFoundException, SQLException {
         this.currentUser = user;
+        this.displayedUser = user;
 
         // setup frame
 
@@ -71,14 +92,6 @@ public class AppointmentList implements ActionListener {
         // setup table
         // need to iterate thru all
 
-        Queue<Appointment> allAppointments = user.getAllAppointments(); // TODO: add all appointments loading
-
-        Appointment curApp;
-
-        while (!allAppointments.isEmpty()) { // DONE added list all functionaliy. does this work?
-            curApp = allAppointments.remove(); // retrieves and removes tail of queue
-            addTableRow(curApp); // pre-defined method that adds to the table one by one
-        }
         applianceTable.setDefaultEditor(Object.class, null);
 
         applianceTable.addMouseListener(new MouseAdapter() {
@@ -127,9 +140,47 @@ public class AppointmentList implements ActionListener {
 
         frame.add(scrollPane, constraints);
 
-        // backButton
+        // UserInputLabel
         constraints.gridx = 0;
         constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        constraints.weightx = 0.2;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        // constraints.weightx = 1;
+        // constraints.weighty = 1;
+        if (currentUser.getPermission() == User.PERMISSION_REPAIRER) {
+            frame.add(UserInputLabel, constraints);
+        }
+
+        // UserInputTextField
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.gridwidth = 1;
+        constraints.weightx = 0.8;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        // constraints.weightx = 1;
+        // constraints.weighty = 1;
+
+        if (currentUser.getPermission() == User.PERMISSION_REPAIRER) {
+            frame.add(UserInputTextField, constraints);
+        }
+
+        // loadUserButton
+        constraints.gridx = 1;
+        constraints.gridy = 3;
+        constraints.gridwidth = 1;
+        constraints.weightx = 0.0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        // constraints.weightx = 1;
+        // constraints.weighty = 1;
+        loadUserButton.addActionListener(this);
+        if (currentUser.getPermission() == User.PERMISSION_REPAIRER) {
+            frame.add(loadUserButton, constraints);
+        }
+
+        // backButton
+        constraints.gridx = 0;
+        constraints.gridy = 4;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -140,7 +191,7 @@ public class AppointmentList implements ActionListener {
 
         // newAppointmentButton
         constraints.gridx = 1;
-        constraints.gridy = 2;
+        constraints.gridy = 4;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -176,6 +227,23 @@ public class AppointmentList implements ActionListener {
             new Landing(this.currentUser);
             frame.setVisible(false);
             frame.dispose();
+        } else if (actionCommand.equals("Load User's Appointments")) {
+            String inputtedUsername = UserInputTextField.getText();
+
+            try {
+                if (User.usernameExists(inputtedUsername)) {
+                    displayedUser = new User(inputtedUsername);
+                    appointmentsText.setText("<HTML><H1><B><U>Loading. Please wait...</U></B></H1></HTML>");
+
+                    updateAppointmentListAccordingToUser(displayedUser);
+                } else {
+                    appointmentsText.setText("<HTML><H1><I>Username does not exist.</H1></I></HTML>");
+                }
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
         }
     }
 
