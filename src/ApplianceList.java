@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 
 public class ApplianceList implements ActionListener {
     User currentUser;
+    User displayedUser;
     JFrame frame = new JFrame();
 
     JLabel applianceText = new JLabel("This is the appliance JTextField");
@@ -36,8 +37,10 @@ public class ApplianceList implements ActionListener {
     JTable applianceTable = new JTable(applianceTableModel);
     JScrollPane scrollPane = new JScrollPane(applianceTable);
 
-    JLabel IDInputLabel = new JLabel("ID:");
-    JTextField IDInputTextField = new JTextField();
+    JLabel UserInputLabel = new JLabel("User:");
+    JTextField UserInputTextField = new JTextField();
+
+    JButton loadUserButton = new JButton("Load User's Appliances");
 
     JButton backButton = new JButton("Back");
     JButton newApplianceButton = new JButton("New Appliance");
@@ -58,8 +61,25 @@ public class ApplianceList implements ActionListener {
 
     }
 
+    private void updateApplianceListAccordingToUser(User u) throws FileNotFoundException, SQLException {
+        Queue allAppliances = u.getAllAppliances(); // loads all appliances in database into the Queue
+
+        Appliance curApp;
+
+        // need to clear table
+
+        applianceTableModel.setRowCount(0);
+
+        while (!allAppliances.isEmpty()) { // DONE added list all functionality. does this work?
+            curApp = (Appliance) allAppliances.remove(); // retrieves and removes tail of queue
+            addTableRow(curApp); // pre-defined method that adds to the table one by one
+        }
+        applianceText.setText("<HTML><H1><B><U>" + u.getUsername() + "\'s appliances</U></B></H1></HTML>");
+    }
+
     public ApplianceList(User user) throws FileNotFoundException, SQLException {
         this.currentUser = user;
+        this.displayedUser = user;
 
         // setup frame
 
@@ -71,15 +91,8 @@ public class ApplianceList implements ActionListener {
 
         // setup table
         // need to iterate thru all
+        updateApplianceListAccordingToUser(displayedUser);
 
-        Queue allAppliances = user.getAllAppliances(); // loads all appliances in database into the Queue
-
-        Appliance curApp;
-
-        while (!allAppliances.isEmpty()) { // DONE added list all functionality. does this work?
-            curApp = (Appliance) allAppliances.remove(); // retrieves and removes tail of queue
-            addTableRow(curApp); // pre-defined method that adds to the table one by one
-        }
         applianceTable.setDefaultEditor(Object.class, null);
 
         applianceTable.addMouseListener(new MouseAdapter() {
@@ -129,7 +142,7 @@ public class ApplianceList implements ActionListener {
 
         frame.add(scrollPane, constraints);
 
-        // IDInputLabel
+        // UserInputLabel
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
@@ -137,10 +150,11 @@ public class ApplianceList implements ActionListener {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
+        if (currentUser.getPermission() == User.PERMISSION_REPAIRER) {
+            frame.add(UserInputLabel, constraints);
+        }
 
-        frame.add(IDInputLabel, constraints);
-
-        // IDInputTextField
+        // UserInputTextField
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
@@ -149,11 +163,26 @@ public class ApplianceList implements ActionListener {
         // constraints.weightx = 1;
         // constraints.weighty = 1;
 
-        frame.add(IDInputTextField, constraints);
+        if (currentUser.getPermission() == User.PERMISSION_REPAIRER) {
+            frame.add(UserInputTextField, constraints);
+        }
+
+        // loadUserButton
+        constraints.gridx = 1;
+        constraints.gridy = 3;
+        constraints.gridwidth = 1;
+        constraints.weightx = 0.0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        // constraints.weightx = 1;
+        // constraints.weighty = 1;
+        loadUserButton.addActionListener(this);
+        if (currentUser.getPermission() == User.PERMISSION_REPAIRER) {
+            frame.add(loadUserButton, constraints);
+        }
 
         // backButton
         constraints.gridx = 0;
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -164,7 +193,7 @@ public class ApplianceList implements ActionListener {
 
         // newApplianceButton
         constraints.gridx = 1;
-        constraints.gridy = 3;
+        constraints.gridy = 4;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -203,6 +232,23 @@ public class ApplianceList implements ActionListener {
             Landing l = new Landing(this.currentUser);
             frame.setVisible(false);
             frame.dispose();
+        } else if (actionCommand.equals("Load User's Appliances")) {
+            String inputtedUsername = UserInputTextField.getText();
+
+            try {
+                if (User.usernameExists(inputtedUsername)) {
+                    displayedUser = new User(inputtedUsername);
+                    applianceText.setText("<HTML><H1><B><U>Loading. Please wait...</U></B></H1></HTML>");
+
+                    updateApplianceListAccordingToUser(displayedUser);
+                } else {
+                    applianceText.setText("<HTML><H1><I>Username does not exist.</H1></I></HTML>");
+                }
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
         }
     }
 }

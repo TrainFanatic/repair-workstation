@@ -27,6 +27,7 @@ public class User {
         rs.next();
 
         boolean usernameFound = rs.getInt(1) == 1;
+        // System.out.println(usernameFound); // there is no bug here
 
         rs.close();
         return (usernameFound); // see if it returns 1 (indicating that it exists)
@@ -41,7 +42,7 @@ public class User {
 
             rs.next();
 
-            int permission = rs.getInt(1);
+            this.permission = rs.getInt(1);
 
             rs.close();
         }
