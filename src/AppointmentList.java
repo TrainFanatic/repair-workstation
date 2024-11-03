@@ -37,7 +37,7 @@ public class AppointmentList implements ActionListener {
     JTable applianceTable = new JTable(appointmentTableModel);
     JScrollPane scrollPane = new JScrollPane(applianceTable);
 
-    JLabel UserInputLabel = new JLabel("User:");
+    JLabel UserInputLabel = new JLabel("Load another user's:");
     JTextField UserInputTextField = new JTextField();
 
     JButton loadUserButton = new JButton("Load User's Appointments");
@@ -153,7 +153,7 @@ public class AppointmentList implements ActionListener {
         // UserInputTextField
         constraints.gridx = 1;
         constraints.gridy = 2;
-        constraints.gridwidth = 1;
+        constraints.gridwidth = 2;
         constraints.weightx = 0.8;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
@@ -164,7 +164,7 @@ public class AppointmentList implements ActionListener {
         }
 
         // loadUserButton
-        constraints.gridx = 1;
+        constraints.gridx = 2;
         constraints.gridy = 3;
         constraints.gridwidth = 1;
         constraints.weightx = 0.0;

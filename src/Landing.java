@@ -1,4 +1,7 @@
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -16,13 +19,16 @@ public class Landing implements ActionListener {
 
     JButton appointmentsButton = new JButton("Check your appointments");
 
+    JLabel repairerUtilitiesLabel = new JLabel("<HTML><I><U>Repairer tools:</U></I></HTML>");
+
     JButton assignedAppointmentsButton = new JButton("Check your assigned appointments");
+    JButton unassignedAppointmentsButton = new JButton("Unassigned appointments");
 
     JButton checkAppliancesButton = new JButton("Check your appliances");
 
     public void screensetup() throws FileNotFoundException, SQLException {
 
-        frame.setSize(300, 200);
+        frame.setSize(480, 225);
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
 
@@ -40,17 +46,7 @@ public class Landing implements ActionListener {
 
         frame.add(msgLanding, constraints);
 
-        // logoutButton
-        constraints.gridx = 1;
-        constraints.gridy = 4;
-        constraints.gridwidth = 1; // no longer full width component
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.weightx = 0.1;
-        // constraints.weighty = 1;
-        logoutButton.addActionListener(this);
-        frame.add(logoutButton, constraints);
-
-        // loginButton
+        // checkAppliancesButton
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1; // no longer full width component
@@ -72,18 +68,57 @@ public class Landing implements ActionListener {
         appointmentsButton.addActionListener(this);
         frame.add(appointmentsButton, constraints);
 
-        // assignedAppointmentsButton
+        // repairerUtilitiesLabel
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.NONE;
         constraints.weightx = 0.1;
+
+        // constraints.weighty = 1;
+
+        if (user.getPermission() == User.PERMISSION_REPAIRER) {
+            repairerUtilitiesLabel.setBorder(new EmptyBorder(20, 0, 5, 0));
+            frame.add(repairerUtilitiesLabel, constraints);
+        }
+
+        // assignedAppointmentsButton
+        constraints.gridx = 1;
+        constraints.gridy = 4;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.weightx = 0.1;
+        constraints.ipady = 1;
         // constraints.weighty = 1;
 
         if (user.getPermission() == User.PERMISSION_REPAIRER) {
             assignedAppointmentsButton.addActionListener(this);
             frame.add(assignedAppointmentsButton, constraints);
         }
+
+        // unassignedAppointmentsButton
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.weightx = 0.1;
+        // constraints.weighty = 1;
+
+        if (user.getPermission() == User.PERMISSION_REPAIRER) {
+            unassignedAppointmentsButton.addActionListener(this);
+            frame.add(unassignedAppointmentsButton, constraints);
+        }
+
+        // logoutButton
+        constraints.gridx = 1;
+        constraints.gridy = 5;
+        constraints.gridwidth = 1; // no longer full width component
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.weightx = 0.1;
+        // constraints.weighty = 1;
+        logoutButton.addActionListener(this);
+        logoutButton.setForeground(Color.red);
+        frame.add(logoutButton, constraints);
 
         frame.setVisible(true);
 
@@ -131,6 +166,13 @@ public class Landing implements ActionListener {
         } else if (actionCommand.equals("Check your assigned appointments")) {
             try {
                 new ListAssignedAppointments(user);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else if (actionCommand.equals("Unassigned appointments")) {
+            try {
+                new PendingAppointments(user);
             } catch (FileNotFoundException | SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

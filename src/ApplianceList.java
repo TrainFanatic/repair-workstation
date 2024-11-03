@@ -37,7 +37,7 @@ public class ApplianceList implements ActionListener {
     JTable applianceTable = new JTable(applianceTableModel);
     JScrollPane scrollPane = new JScrollPane(applianceTable);
 
-    JLabel UserInputLabel = new JLabel("User:");
+    JLabel UserInputLabel = new JLabel("Load another user's:");
     JTextField UserInputTextField = new JTextField();
 
     JButton loadUserButton = new JButton("Load User's Appliances");

@@ -80,4 +80,29 @@ public class Repairer extends User {
         return q;
     }
 
+    public static Queue<Appointment> getAllUnassignedAppointments() {
+        // System.out.println("The program is trying to fetch all appointments assigned
+        // to the repairer");
+        Queue<Appointment> q = new LinkedList<>();
+        SQLRequest sqlr;
+        try {
+            sqlr = new SQLRequest();
+
+            ResultSet rs = sqlr
+                    .SQLQuery(
+                            "SELECT appointment_id FROM appointments WHERE repairer_id = -1;");
+
+            while (rs.next()) {
+                q.add(new Appointment(rs.getInt(1)));
+                // System.out.println("Added" + String.valueOf(rs.getInt(1))); //debugging.
+                // functionned ok
+            }
+        } catch (FileNotFoundException | SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return q;
+    }
+
 }
