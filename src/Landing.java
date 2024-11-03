@@ -16,9 +16,11 @@ public class Landing implements ActionListener {
 
     JButton appointmentsButton = new JButton("Check your appointments");
 
+    JButton assignedAppointmentsButton = new JButton("Check your assigned appointments");
+
     JButton checkAppliancesButton = new JButton("Check your appliances");
 
-    public void screensetup() {
+    public void screensetup() throws FileNotFoundException, SQLException {
 
         frame.setSize(300, 200);
         frame.setLayout(new GridBagLayout());
@@ -70,11 +72,24 @@ public class Landing implements ActionListener {
         appointmentsButton.addActionListener(this);
         frame.add(appointmentsButton, constraints);
 
+        // assignedAppointmentsButton
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.weightx = 0.1;
+        // constraints.weighty = 1;
+
+        if (user.getPermission() == User.PERMISSION_REPAIRER) {
+            assignedAppointmentsButton.addActionListener(this);
+            frame.add(assignedAppointmentsButton, constraints);
+        }
+
         frame.setVisible(true);
 
     }
 
-    public Landing(User user) {
+    public Landing(User user) throws FileNotFoundException, SQLException {
         this.user = user;
 
         screensetup();
@@ -109,6 +124,13 @@ public class Landing implements ActionListener {
         } else if (actionCommand.equals("Check your appointments")) {
             try {
                 new AppointmentList(user);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else if (actionCommand.equals("Check your assigned appointments")) {
+            try {
+                new ListAssignedAppointments(user);
             } catch (FileNotFoundException | SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

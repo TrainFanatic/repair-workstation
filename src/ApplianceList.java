@@ -229,7 +229,12 @@ public class ApplianceList implements ActionListener {
             frame.setVisible(false);
             frame.dispose();
         } else if (actionCommand.equals("Back")) {
-            Landing l = new Landing(this.currentUser);
+            try {
+                Landing l = new Landing(this.currentUser);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             frame.setVisible(false);
             frame.dispose();
         } else if (actionCommand.equals("Load User's Appliances")) {

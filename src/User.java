@@ -34,6 +34,20 @@ public class User {
 
     }
 
+    public Repairer returnRepairerObject() throws SQLException, FileNotFoundException {
+        SQLRequest sqlr = new SQLRequest();
+
+        ResultSet rs = sqlr.SQLQuery("SELECT repairer_id FROM login WHERE username = \"" + username + "\";");
+
+        rs.next();
+
+        int repairer_id = rs.getInt(1);
+
+        rs.close();
+
+        return new Repairer(repairer_id);
+    }
+
     public int getPermission() throws SQLException, FileNotFoundException {
         if (this.permission == PERMISSION_UNINITIALISED) {
             SQLRequest sqlr = new SQLRequest();
@@ -73,7 +87,7 @@ public class User {
 
     public Queue<Appointment> getAllAppointments() throws FileNotFoundException, SQLException {
         SQLRequest sqlr = new SQLRequest();
-        System.out.println("test");
+        // System.out.println("The program is trying to fetch all appointments");
         ResultSet rs = sqlr
                 .SQLQuery("SELECT appointment_id FROM appointments WHERE username = \"" + getUsername() + "\";");
 
