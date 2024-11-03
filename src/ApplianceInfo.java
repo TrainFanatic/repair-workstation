@@ -17,6 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 public class ApplianceInfo implements ActionListener {
+    boolean openApplianceInfoUponClosure;
+
     User user;
     JLabel infoText = new JLabel("<HTML><H1><B>Info on appliance</B></H1></HTML>", SwingConstants.CENTER);
 
@@ -41,6 +43,10 @@ public class ApplianceInfo implements ActionListener {
     Appliance displayedAppliance;
 
     public ApplianceInfo(Appliance appliance, User user) throws SQLException {
+        new ApplianceInfo(appliance, user, true);
+    }
+
+    public ApplianceInfo(Appliance appliance, User user, boolean openApplianceInfoUponClosure) throws SQLException {
         displayedAppliance = appliance;
         this.user = user;
 
@@ -171,11 +177,15 @@ public class ApplianceInfo implements ActionListener {
         if (actionCommand.equals("Back")) {
             frame.setVisible(false);
             frame.dispose();
-            try {
-                new ApplianceList(user);
-            } catch (FileNotFoundException | SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+
+            if (openApplianceInfoUponClosure) {
+
+                try {
+                    new ApplianceList(user);
+                } catch (FileNotFoundException | SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
 
         } else if (actionCommand.equals("Edit this appliance")) {

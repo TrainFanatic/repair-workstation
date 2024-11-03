@@ -30,7 +30,7 @@ public class AppointmentList implements ActionListener {
 
     JLabel appointmentsText = new JLabel("This is the appointments JTextField");
 
-    String columnNames[] = { "When", "Appliance", "Repairer" };
+    String columnNames[] = { "Appointment ID", "When", "Appliance", "Repairer" };
     DefaultTableModel appointmentTableModel = new DefaultTableModel(new Object[][] {}, columnNames);
 
     JTable applianceTable = new JTable(appointmentTableModel);
@@ -42,13 +42,17 @@ public class AppointmentList implements ActionListener {
     Appointment[] listAppointments;
 
     private void addTableRow(Appointment appointment) throws SQLException, FileNotFoundException {
+        int appointmentID = appointment.getAppointmentID();
         String dateAsString = Appointment.dateToString(appointment.getDate());
         String applianceType = appointment.getAppliance().getType();
         String repairer_username = appointment.getRepairer().getUsername();
 
         // JButton applianceInfoButton = new JButton("blabalb");
 
-        appointmentTableModel.addRow(new Object[] { dateAsString, applianceType, repairer_username }); // do i need to
+        appointmentTableModel.addRow(new Object[] { appointmentID, dateAsString, applianceType, repairer_username }); // do
+                                                                                                                      // i
+                                                                                                                      // need
+                                                                                                                      // to
         // setVisible?
 
     }
@@ -77,23 +81,26 @@ public class AppointmentList implements ActionListener {
         }
         applianceTable.setDefaultEditor(Object.class, null);
 
-        // applianceTable.addMouseListener(new MouseAdapter() {
-        // public void mousePressed(MouseEvent doubleClick) {
-        // Point point = doubleClick.getPoint();
-        // int row = applianceTable.rowAtPoint(point);
-        // if (doubleClick.getClickCount() == 2 && applianceTable.getSelectedRow() !=
-        // -1) {
-        // // code here
-        // try {
-        // new AppointmentInfo(...); // TODO: appointment info
-        // } catch (NumberFormatException | FileNotFoundException | SQLException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
+        applianceTable.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent doubleClick) {
+                Point point = doubleClick.getPoint();
+                int row = applianceTable.rowAtPoint(point);
+                if (doubleClick.getClickCount() == 2 && applianceTable.getSelectedRow() != -1) {
+                    // code here
 
-        // }
-        // }
-        // });
+                    try {
+                        new AppointmentInfo(new Appointment((int) applianceTable.getValueAt(row, 0))); // TODO:
+                                                                                                       // appointment
+                                                                                                       // info
+
+                    } catch (NumberFormatException | FileNotFoundException | SQLException e) {
+
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
 
         // addTableRow(new Appliance(1)); // todo need to add functionality to list all
         // appliances of user
