@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.FileNotFoundException;
 import java.awt.Dimension;
 import java.sql.SQLException;
 
@@ -31,6 +32,7 @@ public class ApplianceInfo implements ActionListener {
             "“Heating element OK, fan blade + capacitor OK. Toggle switch has no continuity and must be replaced.”");
 
     JButton backButton = new JButton("Back");
+    JButton editApplianceButton = new JButton("Edit this appliance");
 
     JLabel picLabel;
 
@@ -40,6 +42,7 @@ public class ApplianceInfo implements ActionListener {
 
     public ApplianceInfo(Appliance appliance, User user) throws SQLException {
         displayedAppliance = appliance;
+        this.user = user;
 
         // re-set the relevant text fields
         ownerValue.setText(appliance.getOwnerString());
@@ -144,6 +147,20 @@ public class ApplianceInfo implements ActionListener {
 
         frame.setVisible(true);
 
+        // editApplianceButton
+        constraints.gridx = 2; // aligned with image
+        constraints.gridy = 4;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.weightx = 0.0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        // constraints.weightx = 1;
+        constraints.weighty = 0;
+        editApplianceButton.addActionListener(this);
+        frame.add(editApplianceButton, constraints);
+
+        frame.setVisible(true);
+
     }
 
     public void actionPerformed(ActionEvent evt) {
@@ -154,7 +171,24 @@ public class ApplianceInfo implements ActionListener {
         if (actionCommand.equals("Back")) {
             frame.setVisible(false);
             frame.dispose();
+            try {
+                new ApplianceList(user);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
+        } else if (actionCommand.equals("Edit this appliance")) {
+
+            try {
+                new ApplianceEditor(displayedAppliance, user);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } // this may be dangerous. is the displayed appliance consistent with the one in
+              // SQL?
+            frame.setVisible(false);
+            frame.dispose();
         }
 
     }

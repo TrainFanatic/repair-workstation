@@ -89,9 +89,12 @@ public class ApplianceList implements ActionListener {
                 if (doubleClick.getClickCount() == 2 && applianceTable.getSelectedRow() != -1) {
                     // code here
                     try {
+
                         new ApplianceInfo(
                                 new Appliance((int) applianceTable.getValueAt(row, 0)),
                                 currentUser);
+                        frame.setVisible(false);
+                        frame.dispose();
                     } catch (NumberFormatException | FileNotFoundException | SQLException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -187,6 +190,8 @@ public class ApplianceList implements ActionListener {
 
             try {
                 newAppliance na = new newAppliance(currentUser);
+                frame.setVisible(false);
+                frame.dispose();
 
             } catch (FileNotFoundException | SQLException e) {
                 // TODO Auto-generated catch block

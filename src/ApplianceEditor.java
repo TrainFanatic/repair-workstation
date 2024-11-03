@@ -1,5 +1,9 @@
+//TODO: need to have all of this functionality imported to newAppliance
+
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,7 +28,7 @@ import java.nio.file.Files;
 public class ApplianceEditor implements ActionListener {
 
     static final String EMPTY_FILEPATH = "this is an EMPTY filepath";
-    JLabel newApplianceText = new JLabel("<HTML><H1><U>New Appliance</U></H1></HTML");
+    JLabel newApplianceText = new JLabel("<HTML><H1><U>Edit Appliance</U></H1></HTML");
 
     SQLRequest request = new SQLRequest();
 
@@ -50,20 +54,30 @@ public class ApplianceEditor implements ActionListener {
     JFrame frame = new JFrame();
 
     Appliance toBeEditedAppliance;
+    User user;
     boolean isNewAppliance = false;
 
-    public ApplianceEditor(Appliance toBeEditedAppliance)
+    public ApplianceEditor(Appliance toBeEditedAppliance, User user)
             throws FileNotFoundException, SQLException {
         this.toBeEditedAppliance = toBeEditedAppliance;
+        this.user = user;
 
         setUpFrame();
 
     }
 
     public void setUpFrame() throws SQLException {
-        frame.setSize(600, 400);
+        frame.setMinimumSize(new Dimension(250, 200));
+        frame.setMaximumSize(new Dimension(250, 10000)); // jank
+                                                         // fix
+                                                         // to
+                                                         // get
+                                                         // screen
+                                                         // height
+        frame.setSize(250, 200); // need to replace with method that updates size.
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
+        frame.setAlwaysOnTop(true); // spawn on top so that ApplianceList doesn't obscure frame.
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.PAGE_START;
@@ -151,6 +165,8 @@ public class ApplianceEditor implements ActionListener {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
+        notesArea.setLineWrap(true); // line wrap so that width of frame stays the same?
+        // the line wrap is done BEFORE setting the text so that it isn't way too long.
         notesArea.setText(toBeEditedAppliance.getNote());
 
         frame.add(notesArea, constraints);
@@ -235,9 +251,8 @@ public class ApplianceEditor implements ActionListener {
         // update image
         System.out.println(selectedPath);
         if (selectedPath == ApplianceEditor.EMPTY_FILEPATH) {
-            // reject
-            // System.out.println("rejected filepath!");
-            submitButton.setText("Select valid JPEG file!");
+            // update so we don't need to reject!
+            // submitButton.setText("Select valid JPEG file!");
         } else {
             File imageToBeUploaded = new File(selectedPath);
             try {
@@ -280,6 +295,16 @@ public class ApplianceEditor implements ActionListener {
 
             selectFile();
 
+        } else if (actionCommand.equals("Back")) {
+            try {
+                new ApplianceInfo(toBeEditedAppliance, user);
+                frame.setVisible(false);
+                frame.dispose();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
         } else if (actionCommand.equals("Submit") || actionCommand.equals("Select valid JPEG file!")) {
             if (isNewAppliance) {
                 createNewEntries();
@@ -287,6 +312,15 @@ public class ApplianceEditor implements ActionListener {
 
             }
             updateCredentials();
+            try {
+                new ApplianceList(user);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            frame.setVisible(false);
+            frame.dispose();
 
         }
     }

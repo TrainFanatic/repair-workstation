@@ -287,6 +287,15 @@ public class newAppliance implements ActionListener {
 
             selectFile();
 
+        } else if (actionCommand.equals("Back")) {
+            try {
+                new ApplianceList(currentUser);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            frame.setVisible(false);
+            frame.dispose();
         } else if (actionCommand.equals("Submit") || actionCommand.equals("Select valid JPEG file!")) {
             if (isNewAppliance) {
                 createNewEntries();
