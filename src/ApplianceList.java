@@ -150,7 +150,7 @@ public class ApplianceList implements ActionListener {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
-        if (currentUser.getPermission() == User.PERMISSION_REPAIRER) {
+        if (currentUser.getPermission() >= User.PERMISSION_REPAIRER) {
             frame.add(UserInputLabel, constraints);
         }
 
@@ -163,7 +163,7 @@ public class ApplianceList implements ActionListener {
         // constraints.weightx = 1;
         // constraints.weighty = 1;
 
-        if (currentUser.getPermission() == User.PERMISSION_REPAIRER) {
+        if (currentUser.getPermission() >= User.PERMISSION_REPAIRER) {
             frame.add(UserInputTextField, constraints);
         }
 
@@ -176,7 +176,7 @@ public class ApplianceList implements ActionListener {
         // constraints.weightx = 1;
         // constraints.weighty = 1;
         loadUserButton.addActionListener(this);
-        if (currentUser.getPermission() == User.PERMISSION_REPAIRER) {
+        if (currentUser.getPermission() >= User.PERMISSION_REPAIRER) {
             frame.add(loadUserButton, constraints);
         }
 

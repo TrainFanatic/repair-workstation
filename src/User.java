@@ -64,6 +64,18 @@ public class User {
 
     }
 
+    public void setPermission(int permission) throws SQLException, FileNotFoundException {
+        this.permission = permission;
+
+        String update = "UPDATE login SET permission = " + permission + " WHERE username = \"" + getUsername() + "\";";
+
+        // System.out.println(update);
+
+        SQLRequest sqlr = new SQLRequest();
+
+        sqlr.SQLUpdate(update);
+    }
+
     public Queue<Appliance> getAllAppliances() throws FileNotFoundException, SQLException {
         SQLRequest sqlr = new SQLRequest();
         // System.out.println("test");
@@ -95,6 +107,25 @@ public class User {
 
         while (rs.next()) {
             q.add(new Appointment(rs.getInt(1)));
+            // System.out.println("Added" + String.valueOf(rs.getInt(1))); //debugging.
+            // functionned ok
+        }
+
+        return q;
+
+    }
+
+    public static Queue<User> getAllUsersWithPermissionLevel(int permission)
+            throws FileNotFoundException, SQLException {
+        SQLRequest sqlr = new SQLRequest();
+        // System.out.println("The program is trying to fetch all appointments");
+        ResultSet rs = sqlr
+                .SQLQuery("SELECT username FROM login WHERE permission = " + permission + ";");
+
+        Queue<User> q = new LinkedList<>();
+
+        while (rs.next()) {
+            q.add(new User(rs.getString(1)));
             // System.out.println("Added" + String.valueOf(rs.getInt(1))); //debugging.
             // functionned ok
         }

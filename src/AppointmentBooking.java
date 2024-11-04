@@ -63,7 +63,7 @@ public class AppointmentBooking implements ActionListener {
 
     public AppointmentBooking(User user) throws FileNotFoundException, SQLException {
         this.currentUser = user;
-        frame.setSize(600, 600); // TODO: calibrate
+        frame.setSize(400, 180); // TODO: calibrate
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
 

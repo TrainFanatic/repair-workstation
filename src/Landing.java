@@ -18,17 +18,19 @@ public class Landing implements ActionListener {
     JButton logoutButton = new JButton("Log out");
 
     JButton appointmentsButton = new JButton("Check your appointments");
+    JButton checkAppliancesButton = new JButton("Check your appliances");
 
     JLabel repairerUtilitiesLabel = new JLabel("<HTML><I><U>Repairer tools:</U></I></HTML>");
 
     JButton assignedAppointmentsButton = new JButton("Check your assigned appointments");
     JButton unassignedAppointmentsButton = new JButton("Unassigned appointments");
 
-    JButton checkAppliancesButton = new JButton("Check your appliances");
+    JLabel adminToolsLabel = new JLabel("<html><i>Admin tools:</i></html>");
+    JButton nominateRepairerButton = new JButton("Nominate repairer");
 
     public void screensetup() throws FileNotFoundException, SQLException {
 
-        frame.setSize(480, 225);
+        frame.setSize(480, 300);
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
 
@@ -77,7 +79,7 @@ public class Landing implements ActionListener {
 
         // constraints.weighty = 1;
 
-        if (user.getPermission() == User.PERMISSION_REPAIRER) {
+        if (user.getPermission() >= User.PERMISSION_REPAIRER) {
             repairerUtilitiesLabel.setBorder(new EmptyBorder(20, 0, 5, 0));
             frame.add(repairerUtilitiesLabel, constraints);
         }
@@ -91,7 +93,7 @@ public class Landing implements ActionListener {
         constraints.ipady = 1;
         // constraints.weighty = 1;
 
-        if (user.getPermission() == User.PERMISSION_REPAIRER) {
+        if (user.getPermission() >= User.PERMISSION_REPAIRER) {
             assignedAppointmentsButton.addActionListener(this);
             frame.add(assignedAppointmentsButton, constraints);
         }
@@ -104,14 +106,38 @@ public class Landing implements ActionListener {
         constraints.weightx = 0.1;
         // constraints.weighty = 1;
 
-        if (user.getPermission() == User.PERMISSION_REPAIRER) {
+        if (user.getPermission() >= User.PERMISSION_REPAIRER) {
             unassignedAppointmentsButton.addActionListener(this);
             frame.add(unassignedAppointmentsButton, constraints);
         }
 
+        // adminToolsLabel
+        constraints.gridx = 0;
+        constraints.gridy = 5;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.weightx = 0.1;
+        // constraints.weighty = 1;
+        if (user.getPermission() >= User.PERMISSION_ADMIN) {
+            frame.add(adminToolsLabel, constraints);
+        }
+
+        // nominateRepairerButton
+        constraints.gridx = 0;
+        constraints.gridy = 6;
+        constraints.gridwidth = 2;
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.weightx = 0.1;
+        // constraints.weighty = 1;
+
+        if (user.getPermission() >= User.PERMISSION_ADMIN) {
+            nominateRepairerButton.addActionListener(this);
+            frame.add(nominateRepairerButton, constraints);
+        }
+
         // logoutButton
         constraints.gridx = 1;
-        constraints.gridy = 5;
+        constraints.gridy = 7;
         constraints.gridwidth = 1; // no longer full width component
         constraints.fill = GridBagConstraints.NONE;
         constraints.weightx = 0.1;
@@ -173,6 +199,13 @@ public class Landing implements ActionListener {
         } else if (actionCommand.equals("Unassigned appointments")) {
             try {
                 new PendingAppointments(user);
+            } catch (FileNotFoundException | SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else if (actionCommand.equals("Nominate repairer")) {
+            try {
+                new NominateRepairer(user);
             } catch (FileNotFoundException | SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
