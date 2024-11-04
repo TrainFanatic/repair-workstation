@@ -218,7 +218,7 @@ public class ApplianceList implements ActionListener {
         if (actionCommand.equals("New Appliance")) {
 
             try {
-                newAppliance na = new newAppliance(currentUser);
+                new ApplianceEditor(currentUser);
                 frame.setVisible(false);
                 frame.dispose();
 

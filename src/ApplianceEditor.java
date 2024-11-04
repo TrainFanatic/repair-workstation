@@ -29,7 +29,7 @@ import java.nio.file.Files;
 public class ApplianceEditor implements ActionListener {
 
     static final String EMPTY_FILEPATH = "this is an EMPTY filepath";
-    JLabel newApplianceText = new JLabel("<HTML><H1><U>Edit Appliance</U></H1></HTML");
+    JLabel newApplianceText = new JLabel("<HTML><H1><U>Edit Appliance</U></H1></HTML>");
 
     SQLRequest request = new SQLRequest();
 
@@ -60,6 +60,20 @@ public class ApplianceEditor implements ActionListener {
     User user;
     boolean isNewAppliance = false;
 
+    public ApplianceEditor(User user)
+            throws FileNotFoundException, SQLException {
+        SQLRequest sqlr = new SQLRequest();
+        this.toBeEditedAppliance = new Appliance(sqlr.nextApplianceID(), user.getUsername(), "", "", 0, "",
+                false);
+        this.isNewAppliance = true;
+        this.user = user;
+
+        this.newApplianceText.setText("<HTML><H1><U>New Appliance</U></H1></HTML>");
+
+        setUpFrame();
+
+    }
+
     public ApplianceEditor(Appliance toBeEditedAppliance, User user)
             throws FileNotFoundException, SQLException {
         this.toBeEditedAppliance = toBeEditedAppliance;
@@ -80,7 +94,9 @@ public class ApplianceEditor implements ActionListener {
         frame.setSize(450, 250); // need to replace with method that updates size.
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
-        frame.setAlwaysOnTop(true); // spawn on top so that ApplianceList doesn't obscure frame.
+        // frame.setAlwaysOnTop(true); // spawn on top so that ApplianceList doesn't
+        // obscure frame.
+        // above line is no longer true
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.PAGE_START;
@@ -97,9 +113,13 @@ public class ApplianceEditor implements ActionListener {
         // constraints.weighty = 1;
         // applianceTypeText.setVerticalAlignment(SwingConstants.CENTER);
 
-        BufferedImage imageRaw = toBeEditedAppliance.getImage();
-        Image imageScaled = imageRaw.getScaledInstance(200, 200, 0);
-        picLabel.setIcon(new ImageIcon(imageScaled));
+        if (isNewAppliance) {
+            picLabel.setIcon(new ImageIcon("src/placeholder image.png"));
+        } else {
+            BufferedImage imageRaw = toBeEditedAppliance.getImage();
+            Image imageScaled = imageRaw.getScaledInstance(200, 200, 0);
+            picLabel.setIcon(new ImageIcon(imageScaled));
+        }
 
         frame.add(picLabel, constraints);
 
@@ -123,7 +143,9 @@ public class ApplianceEditor implements ActionListener {
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
 
-        ownerField.setText(toBeEditedAppliance.getOwnerString());
+        if (!isNewAppliance) {
+            ownerField.setText(toBeEditedAppliance.getOwnerString());
+        }
 
         ownerField.setEditable(false);
         // constraints.weightx = 1;
@@ -164,7 +186,9 @@ public class ApplianceEditor implements ActionListener {
         // constraints.weightx = 1;
         // constraints.weighty = 1;
         constraints.ipady = 0;
-        applianceTypeField.setText(toBeEditedAppliance.getType());
+        if (!isNewAppliance) {
+            applianceTypeField.setText(toBeEditedAppliance.getType());
+        }
 
         frame.add(applianceTypeField, constraints);
 
@@ -190,7 +214,9 @@ public class ApplianceEditor implements ActionListener {
         // constraints.weighty = 1;
         notesArea.setLineWrap(true); // line wrap so that width of frame stays the same?
         // the line wrap is done BEFORE setting the text so that it isn't way too long.
-        notesArea.setText(toBeEditedAppliance.getNote());
+        if (!isNewAppliance) {
+            notesArea.setText(toBeEditedAppliance.getNote());
+        }
 
         frame.add(notesArea, constraints);
 
@@ -301,10 +327,14 @@ public class ApplianceEditor implements ActionListener {
     }
 
     public void createNewEntries() {
+        System.out.println("Trying to create new database entries for ID " + toBeEditedAppliance.getApplianceID());
         try {
             SQLRequest sqlr = new SQLRequest();
-            sqlr.SQLUpdate("INSERT " + toBeEditedAppliance.getApplianceID()
-                    + ", \'placeholder_username\', \'\', NULL, 0, \'note\' INTO appliances");
+            sqlr.SQLUpdate("INSERT INTO appliances VALUES(" + toBeEditedAppliance.getApplianceID()
+                    + ", \'" + user.getUsername() + "\', \'\', NULL, 0, \'note\');"); // appliances table
+
+            sqlr.SQLUpdate("INSERT INTO appliances_photos VALUES(" + toBeEditedAppliance.getApplianceID()
+                    + ", NULL);"); // appliances_photos table
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
