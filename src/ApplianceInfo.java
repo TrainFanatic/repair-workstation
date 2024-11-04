@@ -36,6 +36,9 @@ public class ApplianceInfo implements ActionListener {
     JButton backButton = new JButton("Back");
     JButton editApplianceButton = new JButton("Edit this appliance");
 
+    JLabel locationLabel = new JLabel("Location:");
+    JTextField locationField = new JTextField();
+
     JLabel picLabel;
 
     JFrame frame = new JFrame();
@@ -89,7 +92,7 @@ public class ApplianceInfo implements ActionListener {
         constraints.gridx = 2;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        constraints.gridheight = 3;
+        constraints.gridheight = 4;
         constraints.weightx = 0.0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
@@ -140,9 +143,25 @@ public class ApplianceInfo implements ActionListener {
         constraints.gridx = 1;
         frame.add(notesArea, constraints);
 
-        // backButton
+        // locationText/Value
         constraints.gridx = 0;
         constraints.gridy = 4;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        // constraints.weightx = 0.0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        // constraints.weightx = 1;
+        constraints.weighty = 0;
+        // notesArea.setText(appliance.getNote());
+        frame.add(locationLabel, constraints);
+        constraints.gridx = 1;
+        locationField.setText(displayedAppliance.getLocation());
+        locationField.setEditable(false);
+        frame.add(locationField, constraints);
+
+        // backButton
+        constraints.gridx = 0;
+        constraints.gridy = 5;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
         constraints.weightx = 0.0;
@@ -156,7 +175,7 @@ public class ApplianceInfo implements ActionListener {
 
         // editApplianceButton
         constraints.gridx = 2; // aligned with image
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
         constraints.weightx = 0.0;

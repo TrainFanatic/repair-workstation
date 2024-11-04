@@ -3,6 +3,7 @@
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
@@ -53,6 +54,8 @@ public class ApplianceEditor implements ActionListener {
 
     JFrame frame = new JFrame();
 
+    JLabel picLabel = new JLabel();
+
     Appliance toBeEditedAppliance;
     User user;
     boolean isNewAppliance = false;
@@ -67,21 +70,41 @@ public class ApplianceEditor implements ActionListener {
     }
 
     public void setUpFrame() throws SQLException {
-        frame.setMinimumSize(new Dimension(250, 200));
-        frame.setMaximumSize(new Dimension(250, 10000)); // jank
+        frame.setMinimumSize(new Dimension(450, 250));
+        frame.setMaximumSize(new Dimension(450, 10000)); // jank
                                                          // fix
                                                          // to
                                                          // get
                                                          // screen
                                                          // height
-        frame.setSize(250, 200); // need to replace with method that updates size.
+        frame.setSize(450, 250); // need to replace with method that updates size.
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
         frame.setAlwaysOnTop(true); // spawn on top so that ApplianceList doesn't obscure frame.
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.PAGE_START;
+
+        // picLabel
+        constraints.gridx = 2;
+        constraints.gridy = 0;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 5;
+        constraints.weightx = 0.0;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.ipady = 10;
+        // constraints.weightx = 1;
+        // constraints.weighty = 1;
+        // applianceTypeText.setVerticalAlignment(SwingConstants.CENTER);
+
+        BufferedImage imageRaw = toBeEditedAppliance.getImage();
+        Image imageScaled = imageRaw.getScaledInstance(200, 200, 0);
+        picLabel.setIcon(new ImageIcon(imageScaled));
+
+        frame.add(picLabel, constraints);
+
         // ownerText
+        constraints.gridheight = 1;
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
@@ -240,6 +263,10 @@ public class ApplianceEditor implements ActionListener {
         {
             // set the label to the path of the selected file
             selectedPath = j.getSelectedFile().getAbsolutePath();
+            // set preview image
+            ImageIcon imageAtSelectedPath = new ImageIcon(selectedPath);
+            Image scaledImage = imageAtSelectedPath.getImage().getScaledInstance(200, 200, 0);
+            picLabel.setIcon(new ImageIcon(scaledImage));
         }
         // if the user cancelled the operation
         else {
@@ -312,6 +339,7 @@ public class ApplianceEditor implements ActionListener {
 
             }
             updateCredentials();
+
             try {
                 new ApplianceList(user);
             } catch (FileNotFoundException | SQLException e) {
