@@ -114,7 +114,7 @@ public class ApplianceEditor implements ActionListener {
         // applianceTypeText.setVerticalAlignment(SwingConstants.CENTER);
 
         if (isNewAppliance) {
-            picLabel.setIcon(new ImageIcon("src/placeholder image.png"));
+            picLabel.setIcon(new ImageIcon("src/Dependencies/PlaceholderImageForNewAppliances.png"));
         } else {
             BufferedImage imageRaw = toBeEditedAppliance.getImage();
             Image imageScaled = imageRaw.getScaledInstance(200, 200, 0);
