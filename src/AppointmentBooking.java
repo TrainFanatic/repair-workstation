@@ -54,15 +54,39 @@ public class AppointmentBooking implements ActionListener {
 
     boolean modifying = false;
 
+    boolean openAppointmentListUponClosure = false;
+
+    public AppointmentBooking(User user, boolean openAppointmentListUponClosure)
+            throws FileNotFoundException, SQLException {
+        this.openAppointmentListUponClosure = openAppointmentListUponClosure;
+        this.currentUser = user;
+        screenSetUp();
+    }
+
+    public AppointmentBooking(User user, Appointment appointment, boolean openAppointmentListUponClosure)
+            throws FileNotFoundException, SQLException {
+        this.openAppointmentListUponClosure = openAppointmentListUponClosure;
+        this.currentUser = user;
+        this.toBeModifiedAppointment = appointment;
+        screenSetUp();
+    }
+
     public AppointmentBooking(User user, Appointment appointment) throws FileNotFoundException, SQLException {
 
         modifying = true;
         this.toBeModifiedAppointment = appointment;
-        new AppointmentBooking(user);
+        this.currentUser = user;
+        screenSetUp();
+        ;
     }
 
     public AppointmentBooking(User user) throws FileNotFoundException, SQLException {
         this.currentUser = user;
+        screenSetUp();
+    }
+
+    public void screenSetUp() throws FileNotFoundException, SQLException {
+
         frame.setSize(400, 180); // TODO: calibrate
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
@@ -188,7 +212,9 @@ public class AppointmentBooking implements ActionListener {
                 } else {
                     createNewEntries();
                 }
-                new AppointmentList(currentUser);
+                if (openAppointmentListUponClosure) {
+                    new AppointmentList(currentUser);
+                }
             } catch (NumberFormatException | FileNotFoundException | SQLException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -201,11 +227,13 @@ public class AppointmentBooking implements ActionListener {
         if (actionString.equals("Back")) {
             frame.setVisible(false);
             frame.dispose();
-            try {
-                new AppointmentList(currentUser);
-            } catch (FileNotFoundException | SQLException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+            if (openAppointmentListUponClosure) {
+                try {
+                    new AppointmentList(currentUser);
+                } catch (FileNotFoundException | SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
         }
     }

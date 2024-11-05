@@ -227,7 +227,7 @@ public class AppointmentList implements ActionListener {
         if (actionCommand.equals("New Appointment")) {
 
             try {
-                new AppointmentBooking(this.currentUser);
+                new AppointmentBooking(this.currentUser, true);
             } catch (FileNotFoundException | SQLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

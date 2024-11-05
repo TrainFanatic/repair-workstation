@@ -31,6 +31,7 @@ public class AppointmentInfo implements ActionListener {
     JButton deleteButton = new JButton("Delete");
 
     public AppointmentInfo(Appointment appointment, User currentUser) throws FileNotFoundException, SQLException {
+
         this.currentAppointment = appointment;
         this.currentUser = currentUser;
 

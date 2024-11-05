@@ -49,6 +49,9 @@ public class ApplianceEditor implements ActionListener {
     JButton imageFileChooserButton = new JButton("Select file");
     String selectedPath = ApplianceEditor.EMPTY_FILEPATH;
 
+    JLabel locationText = new JLabel("Location");
+    JTextField locationField = new JTextField();
+
     JButton submitButton = new JButton("Submit");
     JButton backButton = new JButton("Back");
 
@@ -83,15 +86,15 @@ public class ApplianceEditor implements ActionListener {
 
     }
 
-    public void setUpFrame() throws SQLException {
-        frame.setMinimumSize(new Dimension(450, 250));
+    public void setUpFrame() throws SQLException, FileNotFoundException {
+        frame.setMinimumSize(new Dimension(450, 320));
         frame.setMaximumSize(new Dimension(450, 10000)); // jank
                                                          // fix
                                                          // to
                                                          // get
                                                          // screen
                                                          // height
-        frame.setSize(450, 250); // need to replace with method that updates size.
+        frame.setSize(450, 320); // need to replace with method that updates size.
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
         // frame.setAlwaysOnTop(true); // spawn on top so that ApplianceList doesn't
@@ -99,14 +102,26 @@ public class ApplianceEditor implements ActionListener {
         // above line is no longer true
 
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.anchor = GridBagConstraints.PAGE_START;
+        constraints.anchor = GridBagConstraints.CENTER;
+
+        // newApplianceText
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 3; // very strange bug where the component is aligned left?
+
+        constraints.fill = GridBagConstraints.BOTH;
+
+        // constraints.weightx = 1;
+        // constraints.weighty = 1;
+        newApplianceText.setHorizontalAlignment(SwingConstants.CENTER);
+        frame.add(newApplianceText, constraints);
 
         // picLabel
         constraints.gridx = 2;
-        constraints.gridy = 0;
+        constraints.gridy = 1;
         constraints.gridwidth = 1;
-        constraints.gridheight = 5;
-        constraints.weightx = 0.0;
+        constraints.gridheight = 4;
+
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.ipady = 10;
         // constraints.weightx = 1;
@@ -128,8 +143,8 @@ public class ApplianceEditor implements ActionListener {
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.gridwidth = 1;
-        constraints.weightx = 0.0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+
+        constraints.fill = GridBagConstraints.BOTH;
         constraints.ipady = 10;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
@@ -139,9 +154,8 @@ public class ApplianceEditor implements ActionListener {
         // ownerField
         constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.gridwidth = 2;
-        constraints.weightx = 0.0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.BOTH;
 
         if (!isNewAppliance) {
             ownerField.setText(toBeEditedAppliance.getOwnerString());
@@ -151,25 +165,12 @@ public class ApplianceEditor implements ActionListener {
         // constraints.weightx = 1;
         // constraints.weighty = 1;
 
-        frame.add(newApplianceText, constraints);
-
-        // newApplianceText
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 2;
-        constraints.weightx = 0.0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        // constraints.weightx = 1;
-        // constraints.weighty = 1;
-
-        frame.add(newApplianceText, constraints);
-
         // applianceTypeText
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        constraints.weightx = 0.0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        ;
+        constraints.fill = GridBagConstraints.BOTH;
         constraints.ipady = 10;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
@@ -181,8 +182,8 @@ public class ApplianceEditor implements ActionListener {
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
-        constraints.weightx = 0.0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        ;
+        constraints.fill = GridBagConstraints.BOTH;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
         constraints.ipady = 0;
@@ -196,8 +197,8 @@ public class ApplianceEditor implements ActionListener {
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        constraints.weightx = 0.0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        ;
+        constraints.fill = GridBagConstraints.BOTH;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
         constraints.ipady = 0;
@@ -208,12 +209,13 @@ public class ApplianceEditor implements ActionListener {
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.gridwidth = 1;
-        constraints.weightx = 0.0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        ;
+        constraints.fill = GridBagConstraints.BOTH;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
         notesArea.setLineWrap(true); // line wrap so that width of frame stays the same?
         // the line wrap is done BEFORE setting the text so that it isn't way too long.
+        notesArea.setWrapStyleWord(true);
         if (!isNewAppliance) {
             notesArea.setText(toBeEditedAppliance.getNote());
         }
@@ -224,8 +226,8 @@ public class ApplianceEditor implements ActionListener {
         constraints.gridx = 0;
         constraints.gridy = 3;
         constraints.gridwidth = 1;
-        constraints.weightx = 0.0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        ;
+        constraints.fill = GridBagConstraints.BOTH;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
         constraints.ipady = 10;
@@ -236,8 +238,8 @@ public class ApplianceEditor implements ActionListener {
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.gridwidth = 1;
-        constraints.weightx = 0.0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        ;
+        constraints.fill = GridBagConstraints.BOTH;
         constraints.ipady = 0;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
@@ -246,11 +248,42 @@ public class ApplianceEditor implements ActionListener {
 
         frame.add(imageFileChooserButton, constraints);
 
-        // backButton
+        // locationText
         constraints.gridx = 0;
         constraints.gridy = 4;
         constraints.gridwidth = 1;
-        constraints.weightx = 0.0;
+        ;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        // constraints.weightx = 1;
+        // constraints.weighty = 1;
+        constraints.ipady = 10;
+
+        frame.add(locationText, constraints);
+
+        // locationField
+        constraints.gridx = 1;
+        constraints.gridy = 4;
+        constraints.gridwidth = 1;
+
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.ipady = 0;
+        // constraints.weightx = 1;
+        // constraints.weighty = 1;
+
+        if (!isNewAppliance) {
+            locationField.setText(toBeEditedAppliance.getLocation());
+        }
+
+        if (user.getPermission() < User.PERMISSION_REPAIRER) { // only editable if repairer or more
+            locationField.setEditable(false);
+        }
+        frame.add(locationField, constraints);
+
+        // backButton
+        constraints.gridx = 0;
+        constraints.gridy = 5;
+        constraints.gridwidth = 1;
+
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
@@ -260,10 +293,10 @@ public class ApplianceEditor implements ActionListener {
         frame.add(backButton, constraints);
 
         // submitButton
-        constraints.gridx = 1;
-        constraints.gridy = 4;
+        constraints.gridx = 2;
+        constraints.gridy = 5;
         constraints.gridwidth = 1;
-        constraints.weightx = 0.0;
+
         constraints.fill = GridBagConstraints.HORIZONTAL;
         // constraints.weightx = 1;
         // constraints.weighty = 1;
@@ -323,6 +356,7 @@ public class ApplianceEditor implements ActionListener {
     public void updateCredentials() {
         toBeEditedAppliance.setType(applianceTypeField.getText());
         toBeEditedAppliance.setNote(notesArea.getText());
+        // toBeEditedAppliance.setLocation();
         submitAppliancePhoto();
     }
 
@@ -331,7 +365,7 @@ public class ApplianceEditor implements ActionListener {
         try {
             SQLRequest sqlr = new SQLRequest();
             sqlr.SQLUpdate("INSERT INTO appliances VALUES(" + toBeEditedAppliance.getApplianceID()
-                    + ", \'" + user.getUsername() + "\', \'\', NULL, 0, \'note\');"); // appliances table
+                    + ", \'" + user.getUsername() + "\', \'\', \"\", 0, \'note\');"); // appliances table
 
             sqlr.SQLUpdate("INSERT INTO appliances_photos VALUES(" + toBeEditedAppliance.getApplianceID()
                     + ", NULL);"); // appliances_photos table
@@ -353,14 +387,24 @@ public class ApplianceEditor implements ActionListener {
             selectFile();
 
         } else if (actionCommand.equals("Back")) {
-            try {
-                new ApplianceInfo(toBeEditedAppliance, user);
-                frame.setVisible(false);
-                frame.dispose();
-            } catch (SQLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            if (!isNewAppliance) {
+                try {
+                    new ApplianceInfo(toBeEditedAppliance, user);
+
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    new ApplianceList(user);
+                } catch (FileNotFoundException | SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
+            frame.setVisible(false);
+            frame.dispose();
 
         } else if (actionCommand.equals("Submit") || actionCommand.equals("Select valid JPEG file!")) {
             if (isNewAppliance) {

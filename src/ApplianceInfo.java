@@ -59,7 +59,14 @@ public class ApplianceInfo implements ActionListener {
         statusValue.setText(Appliance.statusToString(appliance.getStatus()));
         notesArea.setText(appliance.getNote());
 
-        frame.setSize(800, 400);
+        frame.setMinimumSize(new Dimension(450, 320));
+        frame.setMaximumSize(new Dimension(450, 10000)); // jank
+                                                         // fix
+                                                         // to
+                                                         // get
+                                                         // screen
+                                                         // height
+        frame.setSize(450, 320);
         frame.setLayout(new GridBagLayout());
         frame.setLocationRelativeTo(null);
 
